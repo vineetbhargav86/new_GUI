@@ -796,12 +796,14 @@ var isMobile = {
 
 angular.module('iguanaApp.services').value('isMobile', isMobile);
 
+ window.version="0.0.1";
+ window.commitHash="1";
 
 'use strict';
 angular.module('iguanaApp.services')
   .factory('logHeader', function($log, isChromeApp, isCordova, nodeWebkit) {
-    $log.info('Starting Copay v' + window.version + ' #' + window.commitHash);
-    $log.info('Client: isCordova:', isCordova, 'isChromeApp:', isChromeApp, 'isNodeWebkit:', nodeWebkit.isDefined());
+    $log.info('Starting Iguana v' + window.version + ' #' + window.commitHash);
+    //$log.info('Client: isCordova:', isCordova, 'isChromeApp:', isChromeApp, 'isNodeWebkit:', nodeWebkit.isDefined());
     $log.info('Navigator:', navigator.userAgent);
     return {};
   });
