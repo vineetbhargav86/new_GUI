@@ -1,0 +1,20 @@
+<div 
+  class="topbar-container" 
+  ng-include="'views/includes/topbar.html'"
+  ng-init="titleSection='Transaction history'; goBackToState = 'preferencesAdvanced'">
+</div>
+<div class="content preferences advanced" ng-controller="preferencesHistory as history">
+  <ul class="no-bullet m0">
+    <li>
+      <div ng-show="!index.isCordova">
+        <input id="export_file" type="file" nwsaveas="Copay-{{index.alias || index.walletName}}.csv" accept=".csv" style="display:none">
+        <a ng-style="{'color':index.backgroundColor}" ng-click="index.csvHistory();">
+          <span class="text-bold" translate>Export to file</span>
+        </a>
+      </div>
+    </li>
+    <li ng-style="{'color':index.backgroundColor}" ng-click="history.clearTransactionHistory();" translate>
+      <span class="text-bold">Clear cache</span>
+    </li>
+  </ul>
+</div>

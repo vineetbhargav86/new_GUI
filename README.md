@@ -1,1 +1,1 @@
-# new_GUI for iguana
+# SuperNET_GUI
