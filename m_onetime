@@ -1,0 +1,4 @@
+git pull
+cd crypto777
+./$1
+cd ..

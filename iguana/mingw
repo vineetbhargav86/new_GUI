@@ -1,0 +1,6 @@
+include iguana.sources
+
+all: 
+	$(TOOL_DIR)/$(MINGW)-gcc -o ../agents/iguana.exe -D __MINGW $(SOURCES) $(LIBS)
+	$(TOOL_DIR)/$(MINGW)-strip --strip-all ../agents/iguana.exe
+

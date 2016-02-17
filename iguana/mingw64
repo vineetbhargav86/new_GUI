@@ -1,0 +1,3 @@
+include ../mingw.path64
+LIBS := ../win/libcrypto.a ../win/libs/libssl.a ../win/libpthreadGC2_64.a -lws2_64 -lgdi64
+include mingw
