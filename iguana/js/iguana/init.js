@@ -235,6 +235,15 @@ angular
           }
         }
       })
+    .state('logIn', {
+        url: '/login',
+        needProfile: false,
+        views: {
+          'main': {
+            templateUrl: 'views/logIn.html',
+          }
+        }
+      })
       .state('disclaimer', {
         url: '/disclaimer',
         needProfile: false,
@@ -1544,8 +1553,51 @@ console.log("init called");
 
   //  return {};
   });
-  
-  
+
+'use strict';
+
+angular.module('iguanaApp.controllers').controller('logInController',
+    function($scope, $http){
+    
+    $scope.login = function(){
+        
+        //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';
+        /*
+        SPNAPI.submitRequest = function(e) {
+            if ($scope.username || $scope.password) {
+                var request = request;
+            } else {
+                console.log('request is empty');
+                return;
+            }
+            SPNAPI.makeRequest(request, function(json_req, json_resp) {
+               $scope.response = json_resp;
+            });
+        };
+        */
+       
+        
+    var request= 'http://127.0.0.1:7778/api/SuperNET/login?handle=' + $scope.username + '&password=' + $scope.password + '&permanentfile=path&passphrase=sometext';
+        
+    $scope.request = request;
+        
+    $http.get(request).success(function(data){
+            
+        if($scope.username == undefined || $scope.password == undefined){
+                
+            $scope.response = 'Please input all required data';
+        }else{
+                
+            $scope.response = data;
+        }
+    console.log('Data ' + data);   
+            
+        });
+                    
+    }
+     
+});
+
   
 'use strict';
 
