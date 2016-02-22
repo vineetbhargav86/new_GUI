@@ -235,7 +235,7 @@ angular
           }
         }
       })
-    .state('logIn', {
+      .state('logIn', {
         url: '/login',
         needProfile: false,
         views: {
@@ -1557,45 +1557,47 @@ console.log("init called");
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-    function($scope, $http){
-    
-    $scope.login = function(){
-        
-        //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';
-        /*
-        SPNAPI.submitRequest = function(e) {
-            if ($scope.username || $scope.password) {
-                var request = request;
-            } else {
-                console.log('request is empty');
-                return;
-            }
-            SPNAPI.makeRequest(request, function(json_req, json_resp) {
-               $scope.response = json_resp;
-            });
-        };
-        */
-       
-        
-    var request= 'http://127.0.0.1:7778/api/SuperNET/login?handle=' + $scope.username + '&password=' + $scope.password + '&permanentfile=path&passphrase=sometext';
-        
-    $scope.request = request;
-        
-    $http.get(request).success(function(data){
-            
-        if($scope.username == undefined || $scope.password == undefined){
-                
-            $scope.response = 'Please input all required data';
-        }else{
-                
-            $scope.response = data;
+  function($scope, $state, $http, naclAPI, storageService){
+  
+  $scope.login = function() {
+      
+      //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';
+      /*
+      SPNAPI.submitRequest = function(e) {
+          if ($scope.username || $scope.password) {
+              var request = request;
+          } else {
+              console.log('request is empty');
+              return;
+          }
+          SPNAPI.makeRequest(request, function(json_req, json_resp) {
+             $scope.response = json_resp;
+          });
+      };
+      */
+
+    var nacl_request = angular.toJson({
+      "agent": "SuperNET", 
+      "method": "login", 
+      "handle": $scope.username, 
+      "password": $scope.password, 
+      "permanentfile": "path", 
+      "passphrase": "sometext"
+    });
+
+    if ($scope.username == undefined || $scope.password == undefined) {
+      $scope.response = 'Please input all required data';
+    } else {
+      naclAPI.makeRequest(nacl_request, function(request, response) {
+        if (response.data.result == "success") {
+          $scope.response = response.data;
+          console.info(response.data);
+          // $state.go('walletHome');
         }
-    console.log('Data ' + data);   
-            
-        });
-                    
+      });
     }
-     
+
+  }
 });
 
   
