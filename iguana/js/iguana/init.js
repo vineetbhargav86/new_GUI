@@ -13,7 +13,7 @@ var modules = [
   'iguanaApp.services',
   'iguanaApp.controllers',
   'iguanaApp.directives',
-  'iguanaApp.addons'
+  'iguanaApp.addons',
 ];
 
 var iguanaApp = window.iguanaApp = angular.module('iguanaApp', modules);
@@ -1557,7 +1557,9 @@ console.log("init called");
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-  function($scope, $state, $http, naclAPI, storageService){
+  function($scope, $state, $http, naclAPI, pphgen){
+
+  $scope.pass_phrase = pphgen.GeneratePassPhrase();
   
   $scope.login = function() {
       
