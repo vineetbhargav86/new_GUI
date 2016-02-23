@@ -236,7 +236,7 @@ angular
         }
       })
       .state('logIn', {
-        url: '/login',
+        url: '/',
         needProfile: false,
         views: {
           'main': {
@@ -254,7 +254,7 @@ angular
         }
       })
       .state('walletHome', {
-        url: '/',
+        url: '/walletHome',
         walletShouldBeComplete: true,
         needProfile: true,
         views: {
@@ -1557,7 +1557,7 @@ console.log("init called");
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-  function($scope, $state, $http, naclAPI, pphgen){
+  function($scope, $state, $http, naclAPI, pphgen, go){
 
   $scope.pass_phrase = pphgen.GeneratePassPhrase();
   
@@ -1594,7 +1594,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
         if (response.data.result == "success") {
           $scope.response = response.data;
           console.info(response.data);
-          // $state.go('walletHome');
+          go.walletHome();
         }
       });
     }
