@@ -7,6 +7,7 @@
   <meta name="format-detection" content="telephone=no">
   <link rel="stylesheet" type="text/css" href="css/foundation.css">
   <link rel="stylesheet" type="text/css" href="icons1/foundation-icons.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/copay.css">
   <title>Iguana </title>
   <link rel="shortcut icon" href="favicon.ico">
@@ -23,7 +24,7 @@ data-path="{tc}/{config}" >
 
     <div class="off-canvas-wrap" id="off-canvas-wrap">
       <div class="inner-wrap">
-        <div ng-include="'views/includes/sidebar.html'" ng-if="index.hasProfile"></div>
+        <div ng-include="'views/includes/sidebar.html'" ng-if="!index.hasProfile"></div>
 
         <div notifications="right top"></div> 
         <div ng-include="'views/includes/password.html'" ng-if="index.askPassword"></div>
@@ -53,10 +54,15 @@ data-path="{tc}/{config}" >
 <script src="js/iguana/init.js"></script>
 <script src="js/iguana/storage.js"></script>
 <script src="js/iguana/run.js"></script>
-<script src="js/iguana/controllers/preferencesController.js"></script>
-<script src="js/iguana/controllers/indexcontroller.js"></script> 
 <script src="js/iguana/services/animation.js"></script>
 <script src="js/iguana/services/pphgen.js"></script>
+<script src="js/iguana/services/addonManager.js"></script>
+<script src="js/iguana/services/go.js"></script>
+<script src="js/iguana/controllers/versionController.js"></script>
+<script src="js/iguana/controllers/preferencesController.js"></script>
+<script src="js/iguana/controllers/preferencesGlobalController.js"></script>
+<script src="js/iguana/controllers/indexController.js"></script> 
+<script src="js/iguana/controllers/loginController.js"></script>
 <script src="js/iguana/controllers/wallethome.js"></script> 
 <script src="js/iguana/controllers/topbarController.js"></script>
 <script src="js/iguana/controllers/sidebarController.js"></script>
