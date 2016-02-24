@@ -1554,54 +1554,6 @@ console.log("init called");
   //  return {};
   });
 
-'use strict';
-
-angular.module('iguanaApp.controllers').controller('logInController',
-  function($scope, $state, $http, naclAPI, pphgen, go){
-
-  $scope.pass_phrase = pphgen.GeneratePassPhrase();
-  
-  $scope.login = function() {
-      
-      //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';
-      /*
-      SPNAPI.submitRequest = function(e) {
-          if ($scope.username || $scope.password) {
-              var request = request;
-          } else {
-              console.log('request is empty');
-              return;
-          }
-          SPNAPI.makeRequest(request, function(json_req, json_resp) {
-             $scope.response = json_resp;
-          });
-      };
-      */
-
-    var nacl_request = angular.toJson({
-      "agent": "SuperNET", 
-      "method": "login", 
-      "handle": $scope.username, 
-      "password": $scope.password, 
-      "permanentfile": "path", 
-      "passphrase": "sometext"
-    });
-
-    if ($scope.username == undefined || $scope.password == undefined) {
-      $scope.response = 'Please input all required data';
-    } else {
-      naclAPI.makeRequest(nacl_request, function(request, response) {
-        if (response.data.result == "success") {
-          $scope.response = response.data;
-          console.info(response.data);
-          go.walletHome();
-        }
-      });
-    }
-
-  }
-});
-
   
 'use strict';
 
