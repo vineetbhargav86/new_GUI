@@ -23,14 +23,17 @@
   </section>
 
   <section class="right-right" ng-show="showPreferences && !index.noFocusedWallet">
-      <a class="p10" ng-click="topbar.goPreferences()">
-        <i class="fi-widget size-24"></i>
-      </a>
+    <a class="p10" ng-click="topbar.goPreferences()">
+      <i class="fi-widget size-24"></i>
+    </a>
   </section>
   <section class="right-small">
-      <a class="p10" ng-click="topbar.goHome()">
-        <i class="fi-home size-24"></i>
-      </a>
+    <a class="right" ng-show="activeHandle" ng-click="topbar.logout()">
+      <i class="fa fa-sign-out fa-lg"></i>
+    </a>
+    <a class="p10" ng-click="topbar.goHome()">
+      <i class="fi-home size-24"></i>
+    </a>
   </section>
   <section class="right-small peer_favorites" ng-show="showPeerFavorites">
     <label for="favorites">Favorites</label>
