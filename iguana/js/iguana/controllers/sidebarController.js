@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('sidebarController',
-  function($rootScope, $timeout, lodash, profileService, go, isMobile, isCordova) {
+  function($rootScope, $timeout, lodash, go, isMobile, isCordova) {
     var self = this;
     self.isWindowsPhoneApp = isMobile.Windows() && isCordova;
     self.walletSelection = false;
@@ -46,18 +46,18 @@ angular.module('iguanaApp.controllers').controller('sidebarController',
       config.aliasFor = config.aliasFor || {};
 
       // Sanitize empty wallets (fixed in BWC 1.8.1, and auto fixed when wallets completes)
-      var credentials = lodash.filter(profileService.profile.credentials, 'walletName');
-      var ret = lodash.map(credentials, function(c) {
-        return {
-          m: c.m,
-          n: c.n,
-          name: "Personal Wallet", //c.walletName,
-          id: "ID",//c.walletId,
-          color: '#4A90E2'
-        };
-      });
+      // var credentials = lodash.filter(profileService.profile.credentials, 'walletName');
+      // var ret = lodash.map(credentials, function(c) {
+      //   return {
+      //     m: c.m,
+      //     n: c.n,
+      //     name: "Personal Wallet", //c.walletName,
+      //     id: "ID",//c.walletId,
+      //     color: '#4A90E2'
+      //   };
+      // });
 
-      self.wallets = lodash.sortBy(ret, 'name');
+      // self.wallets = lodash.sortBy(ret, 'name');
     };
 
     self.setWallets();
