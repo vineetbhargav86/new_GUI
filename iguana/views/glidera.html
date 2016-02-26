@@ -9,7 +9,7 @@
 <div class="content glidera p20b" ng-controller="glideraController as glidera">
 
   <div class="onGoingProcess" ng-show="glidera.loading || index.glideraLoading">
-    <div class="onGoingProcess-content" ng-style="{'background-color':index.backgroundColor}">
+    <div class="onGoingProcess-content" ng-style="{'background-color':app_config.colorFor}">
     <div class="spinner">
       <div class="rect1"></div>
       <div class="rect2"></div>
@@ -93,7 +93,7 @@
           ng-attr-placeholder="{{'Paste the authorization code here'}}" required>
           <input
             class="button expand round"
-            ng-style="{'background-color':index.backgroundColor}"
+            ng-style="{'background-color':app_config.colorFor}"
             type="submit" value="Get started" ng-disabled="oauthCodeForm.$invalid || glidera.loading">
         </form>
         <button class="button light-gray expand outline round"

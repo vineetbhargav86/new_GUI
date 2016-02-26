@@ -30,7 +30,7 @@
   </div>
 
   <div class="onGoingProcess" ng-show="index.anyOnGoingProcess && !index.isOffline">
-    <div class="onGoingProcess-content" ng-style="{'background-color':index.backgroundColor}">
+    <div class="onGoingProcess-content" ng-style="{'background-color':app_config.colorFor}">
       <div class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -51,7 +51,7 @@
   </div>
 
   <div class="onGoingProcess" ng-show="home.onGoingProcess && !index.anyOnGoingProces && !index.isOffline">
-    <div class="onGoingProcess-content" ng-style="{'background-color':index.backgroundColor}">
+    <div class="onGoingProcess-content" ng-style="{'background-color':app_config.colorFor}">
       <div class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -75,10 +75,10 @@
       <div class="oh pr bw">
           <div class="avatar-name columns">
             <div class="avatar-wallet left"
-              ng-style="{'background-color':index.backgroundColor}">
+              ng-style="{'background-color':app_config.colorFor}">
             </div> 
           </div>
-        <div class="amount"><!--ng-style="{'background-color':index.backgroundColor}"-->
+        <div class="amount"><!--ng-style="{'background-color':app_config.colorFor}"-->
           <div ng-if="!index.anyOnGoingProcess && !index.notAuthorized">
             <div class="m15t" ng-show="index.updateError" >
               <span class="size-12 db m10b">{{index.updateError|translate}}</span>
@@ -347,7 +347,7 @@
     <div id="receive" class="receive tab-view">
       <div class="avatar-name columns">
             <div class="avatar-wallet left"
-              ng-style="{'background-color':index.backgroundColor}">
+              ng-style="{'background-color':app_config.colorFor}">
             </div> 
           </div>
       <div ng-show="index.needsBackup" class="p60t columns text-center">
@@ -361,7 +361,7 @@
           Share this wallet address to receive payments. To protect your privacy, new addresses are generated automatically once you use them.
         </p>
         <button class="m20t button black expand round"
-          ng-click="$root.go('backup')" ng-style="{'background-color':index.backgroundColor}" >
+          ng-click="$root.go('backup')" ng-style="{'background-color':app_config.colorFor}" >
           <span translate>Request A Specific Amount</span>
       </button>
       </div>
@@ -412,7 +412,7 @@
         <div class="row m20t">
           <div class="small-12 columns" ng-show="!home.generatingAddress && home.addr[index.walletId]">
             <a class="button expand small round m10b" ng-click="home.openCustomizedAmountModal(home.addr[index.walletId])"
-            ng-style="{'background-color':index.backgroundColor}">
+            ng-style="{'background-color':app_config.colorFor}">
               <span translate>Request a specific amount</span>
             </a>
           </div>
@@ -437,10 +437,10 @@
        <div class="oh pr bw">
           <div class="avatar-name columns">
             <div class="avatar-wallet left"
-              ng-style="{'background-color':index.backgroundColor}">
+              ng-style="{'background-color':app_config.colorFor}">
             </div> 
           </div>
-        <div class="amount"><!--ng-style="{'background-color':index.backgroundColor}"-->
+        <div class="amount"><!--ng-style="{'background-color':app_config.colorFor}"-->
           <div ng-if="!index.anyOnGoingProcess && !index.notAuthorized">
             <div class="m15t" ng-show="index.updateError" ng-click='index.updateAll({triggerTxUpdate: true})'>
               <span class="size-12 db m10b">{{index.updateError|translate}}</span>
@@ -511,7 +511,7 @@
                   {{index.addressbook[_address] || _address}}
                 </div>
                 <a class="postfix size-12 m0 text-gray" 
-                ng-style="{'color':index.backgroundColor}"
+                ng-style="{'color':app_config.colorFor}"
                 ng-click="home.openDestinationAddressModal(index.otherWallets, _address)">
                   <i class="icon-wallet text-bold size-18"></i>
                 </a>
@@ -550,7 +550,7 @@
                   <div class="input">
                     <input type="number" id="amount" ng-disabled="home.blockUx || home.lockAmount" name="amount" ng-attr-placeholder="{{'Amount in'|translate}} {{home.unitName}}" ng-minlength="0.00000001" ng-maxlength="10000000000" ng-model="_amount" valid-amount required autocomplete="off" ng-focus="home.formFocus('amount')" ng-blur="home.formFocus(false)">
                     <input type="number" id="alternative"  name="alternative"  ng-model="_alternative" style="display:none">
-                    <a class="postfix button" ng-style="{'background-color':index.backgroundColor}" ng-click="home.showAlternative()">{{home.unitName}}</a>
+                    <a class="postfix button" ng-style="{'background-color':app_config.colorFor}" ng-click="home.showAlternative()">{{home.unitName}}</a>
                   </div>
                 </div>
                 <div ng-if="home.canShowAlternative()">
@@ -584,7 +584,7 @@
               </div>
               <div class="columns" ng-class="{'small-6 medium-6 large-6':(home._paypro || home.lockAddress || home.lockAmount)}">
                 <button type="submit" class="button black round expand" ng-disabled="sendForm.$invalid || home.blockUx ||  index.isOffline"
-                  ng-style="{'background-color':index.backgroundColor}"  translate>
+                  ng-style="{'background-color':app_config.colorFor}"  translate>
                   Send
                 </button>
               </div>

@@ -8,7 +8,7 @@
 <div class="content glidera" ng-controller="sellGlideraController as sell">
 
   <div class="onGoingProcess" ng-show="sell.loading">
-    <div class="onGoingProcess-content" ng-style="{'background-color':index.backgroundColor}">
+    <div class="onGoingProcess-content" ng-style="{'background-color':app_config.colorFor}">
     <div class="spinner">
       <div class="rect1"></div>
       <div class="rect2"></div>
@@ -91,7 +91,7 @@
             </div>
 
             <input class="button black expand round" 
-            ng-style="{'background-color':index.backgroundColor}"
+            ng-style="{'background-color':app_config.colorFor}"
             type="submit" value="{{'Continue'}}" 
             ng-disabled="index.glideraLimits.transactDisabledPendingFirstTransaction || !sell.sellPrice.qty ||
             !sell.selectedWalletId || sell.loading">
@@ -109,7 +109,7 @@
             ng-submit="sell.createTx(index.glideraToken, index.glideraPermissions, twoFaCode)" novalidate>
               <input type="number" ng-model="twoFaCode" required>
               <input class="button black expand round" 
-              ng-style="{'background-color':index.backgroundColor}"
+              ng-style="{'background-color':app_config.colorFor}"
               type="submit" value="{{'Sell'}}" ng-disabled="sellForm.$invalid || sell.loading">
           </form>
           <p class="m10t size-12 text-gray">

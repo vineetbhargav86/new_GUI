@@ -7,7 +7,7 @@
 <div class="content preferences advanced" ng-controller="paperWalletController as paperWallet">
   <h4 ng-show="!paperWallet.error"></h4>
   <div class="onGoingProcess" ng-show="paperWallet.scanning || paperWallet.sending">
-    <div class="onGoingProcess-content" ng-style="{'background-color':index.backgroundColor}">
+    <div class="onGoingProcess-content" ng-style="{'background-color':app_config.colorFor}">
       <div class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -48,7 +48,7 @@
           </div>
         <button
             ng-disabled="paperWallet.scanning || !paperWallet.scannedKey"
-            ng-style="{'background-color':index.backgroundColor}" 
+            ng-style="{'background-color':app_config.colorFor}" 
             class="button black round expand medium" 
             ng-click="paperWallet.scanFunds()" 
             translate>Scan Wallet Funds
@@ -66,7 +66,7 @@
 
       <button 
         ng-disabled="paperWallet.sending || paperWallet.balanceSat <= 0"
-        ng-style="{'background-color':index.backgroundColor}" 
+        ng-style="{'background-color':app_config.colorFor}" 
         class="button black round expand" 
         ng-click="paperWallet.sweepWallet()" 
         translate>Sweep Wallet

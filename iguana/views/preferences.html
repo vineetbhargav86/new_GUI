@@ -22,8 +22,8 @@
 
     <li ng-click="$root.go('preferencesEmail')">
       <div class="right text-gray">
-        <span ng-if="!index.preferences.email" translate>Disabled</span>
-        <span ng-if="index.preferences.email">{{index.preferences.email}}</span>
+        <span ng-if="!app_config.email" translate>Disabled</span>
+        <span ng-if="app_config.email">{{index.preferences.email}}</span>
         <i class="icon-arrow-right3 size-24"></i>
       </div>
       <div translate>Email Notifications</div>
@@ -31,7 +31,7 @@
 
     <li ng-click="$root.go('preferencesColor')">
       <div class="right text-gray">
-        <span ng-style="{'color':index.backgroundColor}">&block;</span>
+        <span ng-style="{'color':app_config.colorFor}">&block;</span>
         <i class="icon-arrow-right3 size-24"></i>
       </div>      
       <div translate>Color</div>

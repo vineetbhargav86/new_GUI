@@ -13,7 +13,7 @@
   </div>
   <ul class="no-bullet m0">
     <li ng-click="preferences.deleteWallet()">
-      <div class="right" ng-style="{'color':index.backgroundColor}">
+      <div class="right" ng-style="{'color':app_config.colorFor}">
         {{index.walletName}} <span ng-show="index.alias">({{index.alias}})</span>
       </div>
       <div translate>Delete wallet</div>

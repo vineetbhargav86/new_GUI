@@ -1,7 +1,7 @@
 <div 
   class="topbar-container" 
   ng-include="'views/includes/topbar.html'"
-  ng-init="titleSection='Backup'; closeToHome = true; noColor = false">
+  ng-init="titleSection='Backup'; goBackToState = 'preferences'">
 </div>
  
 <div class="content backup-page-content ">
@@ -16,6 +16,6 @@
     
     <div class="column">
         <input type="submit" class="button expand black round" value="{{'Continue'|translate}}"
-        ng-style="{'background-color':index.backgroundColor}">
+        ng-style="{'background-color':app_config.colorFor}">
     </div>
 </div>
