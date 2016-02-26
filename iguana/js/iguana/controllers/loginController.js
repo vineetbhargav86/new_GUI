@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-  function($rootScope, $scope, $state, $http, naclAPI, pphgen, go){
+  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService){
+
+  $scope.passphrase = null;
 
   // $scope.check_activeHandle = function() {
   //   console.info("check activeHandle...");
@@ -18,28 +20,51 @@ angular.module('iguanaApp.controllers').controller('logInController',
   //   });
   // }
 
-  if ($rootScope.activeHandle) {
-    go.walletHome();
-  }
+  // if ($rootScope.activeHandle) {
+  //   go.walletHome();
+  // }
 
-  $scope.pass_phrase = pphgen.GeneratePassPhrase();
+  storageService.getProfile(function(err, profile){
+    if (err) {
+      $log.debug('getProfile error:', err);
+      return;
+    } else if (!profile) {
+      $log.debug('Profile not exists :', profile);
+
+      profile = Profile.create();
+
+      $scope.passphrase = pphgen.GeneratePassPhrase();
+
+      storageService.storeNewProfile(profile, function(err) {
+        if (err) {
+          $log.debug('error store new profile : ', err);
+          return;
+        } else {
+          $log.debug('store new Profile : ', profile);
+        }
+      });
+    } else {
+      $log.debug('Profile exists : ', profile);
+      // go.walletHome();
+    }
+  });
   
   $scope.login = function() {
       
-      //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';
-      /*
-      SPNAPI.submitRequest = function(e) {
-          if ($scope.username || $scope.password) {
-              var request = request;
-          } else {
-              console.log('request is empty');
-              return;
-          }
-          SPNAPI.makeRequest(request, function(json_req, json_resp) {
-             $scope.response = json_resp;
-          });
-      };
-      */
+  //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';
+  /*
+    SPNAPI.submitRequest = function(e) {
+        if ($scope.username || $scope.password) {
+            var request = request;
+        } else {
+            console.log('request is empty');
+            return;
+        }
+        SPNAPI.makeRequest(request, function(json_req, json_resp) {
+           $scope.response = json_resp;
+        });
+    };
+  */
 
     var nacl_request_login = angular.toJson({
       "agent": "SuperNET", 
@@ -47,7 +72,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
       "handle": $scope.username, 
       "password": $scope.password, 
       "permanentfile": "path", 
-      "passphrase": $scope.pass_phrase
+      "passphrase": $scope.passphrase
     });
 
     if ($scope.username == undefined || $scope.password == undefined) {
@@ -60,7 +85,28 @@ angular.module('iguanaApp.controllers').controller('logInController',
           console.info(response.data);
           $rootScope.activeHandle = response.data.handle;
           console.info('login page - activeHandle: ' + $rootScope.activeHandle);
-          go.walletHome();
+
+          storageService.getProfile(function(err, profile) {
+            if (err) {
+              $log.debug('getProfile error:', err);
+              return;
+            } else {
+              profile.credentials.handle = $scope.username;
+              profile.credentials.permanentfile = "path";
+              
+              storageService.storeProfile(profile, function(err) {
+                if (err) {
+                  $log.debug('storeProfile error: ', err);
+                } else {
+                  $log.debug('profile updated: ', profile);
+                }
+              });
+
+              $timeout(function(){
+                go.walletHome();
+              }, 50);
+            }
+          });
         }
       });
     }
