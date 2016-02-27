@@ -1,0 +1,10 @@
+
+.vagrant/
+
+Vagrantfile
+
+tmp/
+
+DB/
+
+includes/nanomsg/
