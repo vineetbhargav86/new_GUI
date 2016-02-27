@@ -3,7 +3,7 @@
 angular.module('iguanaApp.controllers').controller('preferencesColorController',
   function($scope, $rootScope, $timeout, $log, storageService, go) {
   
-  $scope.colorOpts = [
+  this.colorOpts = [
     '#DD4B39',
     '#F38F12',
     '#FAA77F',
@@ -18,9 +18,7 @@ angular.module('iguanaApp.controllers').controller('preferencesColorController',
     '#7A8C9E',
   ];
 
-  $scope.color = $rootScope.app_config.colorFor || '#4A90E2';
-
-  $scope.save = function(color) {
+  this.save = function(color) {
     
     $rootScope.app_config.colorFor = color;
 

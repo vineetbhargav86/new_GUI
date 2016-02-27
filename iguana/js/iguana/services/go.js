@@ -116,6 +116,8 @@ angular.module('iguanaApp.services').factory('go',
     })
   };
 
+  $rootScope.app_config = {};
+
   storageService.getConfig(function(err, config) {
     if (err) {
       $log.debug('getConfig error: ', err);
