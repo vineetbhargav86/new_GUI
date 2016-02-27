@@ -126,6 +126,28 @@ angular.module('iguanaApp.services').factory('go',
     }
   });
 
+  $rootScope.checkProfile = function() {
+    storageService.getProfile(function(err, profile) {
+      if (err) {
+        $log.debug('getProfile error: ', err);
+        return;
+      } else if (!profile) {
+        $timeout(function() {
+          root.logInPage();
+        }, 50);
+      } else {
+        storageService.storeProfile(profile, function(err) {
+          if (err) {
+            $log.debug('storeProfile error: ', err);
+            return;
+          } else {
+            $log.debug('profile encrypted');
+          }
+        });
+      }
+    });
+  };
+
   // $rootScope.check_activeHandle = function() {
   //   naclAPI.makeRequest($rootScope.nacl_request.activehandle, function(request, response) {
   //     console.info("SuperNET activeHandle Response:");

@@ -29,7 +29,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
       $log.debug('getProfile error:', err);
       return;
     } else if (!profile) {
-      $log.debug('Profile not exists :', profile);
+      $log.debug('Profile not exists');
 
       profile = Profile.create();
 
@@ -40,11 +40,20 @@ angular.module('iguanaApp.controllers').controller('logInController',
           $log.debug('error store new profile : ', err);
           return;
         } else {
-          $log.debug('store new Profile : ', profile);
+          $log.debug('store new Profile');
         }
       });
     } else {
-      $log.debug('Profile exists : ', profile);
+      $log.debug('Profile exists');
+      
+      storageService.storeProfile(profile, function(err) {
+        if (err) {
+          $log.debug('storeProfile error: ', err);
+          return;
+        } else {
+          $log.debug('profile encrypted');
+        }
+      });
       // go.walletHome();
     }
   });
@@ -97,8 +106,9 @@ angular.module('iguanaApp.controllers').controller('logInController',
               storageService.storeProfile(profile, function(err) {
                 if (err) {
                   $log.debug('storeProfile error: ', err);
+                  return;
                 } else {
-                  $log.debug('profile updated: ', profile);
+                  $log.debug('profile updated & encrypted');
                 }
               });
 
