@@ -236,7 +236,7 @@ angular
         }
       })
       .state('logIn', {
-        url: '/logIn',
+        url: '/',
         needProfile: false,
         views: {
           'main': {
@@ -245,7 +245,7 @@ angular
         }
       })
       .state('signup', {
-        url: '/',
+        url: '/signup',
         needProfile: false,
         views: {
           'main': {
