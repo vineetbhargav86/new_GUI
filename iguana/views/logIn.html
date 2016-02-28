@@ -1,23 +1,36 @@
 <div class="splash extra-padding-bottom p20t content text-center"
   ng-controller="logInController as logIn" ng-init="">
-  <div class="row">
-    <div class="medium-centered small-centered large-centered columns size-14">
+<div id="pass">
+  <div class="pass-banner"></div>
+  <div class="pass-bottom">
+    <div class="pass-window">
+    <div class="pass-window-head">
+      <div class="medium-centered small-centered large-centered columns size-16">
       <span class="text-bold text-white" translate>WELCOME TO IGUANA</span>
       <p class="text-gray m0 text-light" translate>Please Login Here</p>
     </div>
-  </div>
+    </div>  
+    <div class="pass-window-body">
   <div class="row">
-      <div class="small-8 small-offset-2 large-4 large-offset-4 columns">
+      <div class="small-8 small-offset-2 large-10 large-offset-1 columns">
       <form name="loginForm" ng-submit="" role="form">
           <div class="form-group">
-              <label style="color:#d3d3d3" for="username" >Username
-              <input style="color:#d3d3d3" type="text" name="username" id="username" class="form-control" ng-model="username" placeholder="Type your username here" required />
-              </label>
+              
+              <input type="text" name="username" id="username" class="form-control login-form-input" ng-model="username" required />
+              <label for="username" class="login-form-label">Username</label>
           </div>
           <div class="form-group">
-              <label style="color:#d3d3d3" for="password" >Password
-              <input style="color:#d3d3d3" type="text" name="password" id="password" class="form-control" ng-model="password" placeholder="Type your password here" required />
-              </label>
+              
+              <input type="password" name="password" id="password" class="form-control login-form-input" ng-model="password" required />
+              <label for="password" class="login-form-label">Password</label>
+          </div>
+          <div class="form-group">
+              
+              <input type="password" name="passphrase" id="passphrase" class="form-control login-form-input" ng-model="write_passphrase" required />
+              <label for="passphrase" class="login-form-label">Passphrase</label>
+          </div>
+          <div class="form-actions">
+                <button type="button" class="btn btn-white" ng-click="registrate()">New account</button>
           </div>
           <div class="form-actions">
                 <button type="submit" class="btn btn-primary" ng-click="login()">Login</button>
@@ -26,6 +39,8 @@
       <h3 ng-show="passphrase" style="color:#fff;">These words must be saved somewhere safe <br/>
         <strong style="text-decoration: underline;">{{ passphrase }}</strong></h3>
       </div>
+  </div>  
+  </div>
   </div>
 <!--   <div class="row">
     <p >
@@ -37,4 +52,6 @@
     </p> 
     
   </div> -->
+  </div>
+</div>
 </div>
