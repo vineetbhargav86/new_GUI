@@ -231,7 +231,7 @@ angular.module('iguanaApp.services').factory('storageService',
   // File storage is not supported for writting according to 
   // https://github.com/apache/cordova-plugin-file/#supported-platforms
   var shouldUseFileStorage = isCordova && !isMobile.Windows();
-  $log.debug('Using file storage:', shouldUseFileStorage);
+  // $log.debug('Using file storage:', shouldUseFileStorage);
 
 
   var storage = shouldUseFileStorage ? fileStorageService : localStorageService;
@@ -251,17 +251,17 @@ angular.module('iguanaApp.services').factory('storageService',
   var encryptOnMobile = function(text, cb) {
 
     // UUID encryption is disabled.
-    // return cb(null, text);
+    return cb(null, text);
     //
     // getUUID(function(uuid) {
     //   if (uuid) {
-      $log.debug('Encrypting profile');
-      text = sjcl.encrypt("profile", text, {
-        iter: 10000
-      });
-      $log.debug("profile encrypted: ", text);
+      // $log.debug('Encrypting profile');
+      // text = sjcl.encrypt("profile", text, {
+      //   iter: 10000
+      // });
+      // $log.debug("profile encrypted: ", text);
     //   }
-      return cb(null, text);
+      // return cb(null, text);
     // });
   };
 
@@ -270,24 +270,24 @@ angular.module('iguanaApp.services').factory('storageService',
     var json;
     try {
       json = JSON.parse(text);
-      $log.debug("Got value: ", json);
+      // $log.debug("Got value: ", json);
     } catch (e) {
-      $log.debug("error descrypt: ", e);
+      // $log.debug("error descrypt: ", e);
     };
 
     if (!json) return cb('Could not access storage');
 
     if (!json.iter || !json.ct) {
-      $log.debug('Profile is not encrypted');
+      // $log.debug('Profile is not encrypted');
       return cb(null, text);
     }
 
-    $log.debug('Profile is encrypted');
+    // $log.debug('Profile is encrypted');
 
     try {
-      text = sjcl.decrypt("profile", text);
+      // text = sjcl.decrypt("profile", text);
 
-      $log.debug('Migrating to unencrypted profile');
+      // $log.debug('Migrating to unencrypted profile');
       return storage.set('profile', text, function(err) {
         return cb(err, text);
       });

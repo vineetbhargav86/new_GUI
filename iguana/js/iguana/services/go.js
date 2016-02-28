@@ -135,15 +135,6 @@ angular.module('iguanaApp.services').factory('go',
         $timeout(function() {
           root.logInPage();
         }, 50);
-      } else {
-        storageService.storeProfile(profile, function(err) {
-          if (err) {
-            $log.debug('storeProfile error: ', err);
-            return;
-          } else {
-            $log.debug('profile encrypted');
-          }
-        });
       }
     });
   };
