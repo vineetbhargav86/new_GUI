@@ -236,11 +236,20 @@ angular
         }
       })
       .state('logIn', {
-        url: '/',
+        url: '/logIn',
         needProfile: false,
         views: {
           'main': {
             templateUrl: 'views/logIn.html',
+          }
+        }
+      })
+      .state('signup', {
+        url: '/',
+        needProfile: false,
+        views: {
+          'main': {
+            templateUrl: 'views/signup.html',
           }
         }
       })
