@@ -231,7 +231,7 @@ angular.module('iguanaApp.services').factory('storageService',
   // File storage is not supported for writting according to 
   // https://github.com/apache/cordova-plugin-file/#supported-platforms
   var shouldUseFileStorage = isCordova && !isMobile.Windows();
-  $log.debug('Using file storage:', shouldUseFileStorage);
+  // $log.debug('Using file storage:', shouldUseFileStorage);
 
 
   var storage = shouldUseFileStorage ? fileStorageService : localStorageService;
@@ -255,10 +255,13 @@ angular.module('iguanaApp.services').factory('storageService',
     //
     // getUUID(function(uuid) {
     //   if (uuid) {
-    //     $log.debug('Encrypting profile');
-    //     text = sjcl.encrypt(uuid, text);
+      // $log.debug('Encrypting profile');
+      // text = sjcl.encrypt("profile", text, {
+      //   iter: 10000
+      // });
+      // $log.debug("profile encrypted: ", text);
     //   }
-    //   return cb(null, text);
+      // return cb(null, text);
     // });
   };
 
@@ -267,35 +270,33 @@ angular.module('iguanaApp.services').factory('storageService',
     var json;
     try {
       json = JSON.parse(text);
-      console.log("Got value:"+text);
-    } catch (e) {};
+      // $log.debug("Got value: ", json);
+    } catch (e) {
+      // $log.debug("error descrypt: ", e);
+    };
 
     if (!json) return cb('Could not access storage');
 
     if (!json.iter || !json.ct) {
-      $log.debug('Profile is not encrypted');
+      // $log.debug('Profile is not encrypted');
       return cb(null, text);
     }
 
-    $log.debug('Profile is encrypted');
-    getUUID(function(uuid) {
-      $log.debug('Device UUID:' + uuid);
-      if (!uuid)
-        return cb('Could not decrypt storage: could not get device ID');
+    // $log.debug('Profile is encrypted');
 
-      try {
-        //text = sjcl.decrypt(uuid, text);
+    try {
+      // text = sjcl.decrypt("profile", text);
 
-        $log.info('Migrating to unencrypted profile');
-        return storage.set('profile', text, function(err) {
-          return cb(err, text);
-        });
-      } catch (e) {
-        $log.warn('Decrypt error: ', e);
-        return cb('Could not decrypt storage: device ID mismatch');
-      };
+      // $log.debug('Migrating to unencrypted profile');
+      return storage.set('profile', text, function(err) {
+        return cb(err, text);
+      });
+    } catch (e) {
+      $log.debug('Decrypt error: ', e);
+      return cb('Could not decrypt storage: device ID mismatch');
+    };
+      
       return cb(null, text);
-    });
   };
 
 
@@ -307,11 +308,11 @@ angular.module('iguanaApp.services').factory('storageService',
       if (err) return cb(err);
       if (!str) return cb();
 
-      $log.info('Starting Migration profile to File storage...');
+      $log.debug('Starting Migration profile to File storage...');
 
       fileStorageService.create('profile', str, function(err) {
         if (err) cb(err);
-        $log.info('Profile Migrated successfully');
+        $log.debug('Profile Migrated successfully');
 
         localStorageService.get('config', function(err, c) {
           if (err) return cb(err);
@@ -320,10 +321,10 @@ angular.module('iguanaApp.services').factory('storageService',
           fileStorageService.create('config', c, function(err) {
 
             if (err) {
-              $log.info('Error migrating config: ignoring', err);
+              $log.debug('Error migrating config: ignoring', err);
               return root.getProfile(cb);
             }
-            $log.info('Config Migrated successfully');
+            $log.debug('Config Migrated successfully');
             return root.getProfile(cb);
           });
         });

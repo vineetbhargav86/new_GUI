@@ -244,6 +244,15 @@ angular
           }
         }
       })
+      .state('signup', {
+        url: '/signup',
+        needProfile: false,
+        views: {
+          'main': {
+            templateUrl: 'views/signup.html',
+          }
+        }
+      })
       .state('disclaimer', {
         url: '/disclaimer',
         needProfile: false,

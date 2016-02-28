@@ -3,16 +3,7 @@
 angular.module('iguanaApp.controllers').controller('topbarController', 
   function(go, $state, $log, $rootScope, $timeout, naclAPI, storageService) { 
 
-  storageService.getProfile(function(err, profile) {
-    if (err) {
-      $log.debug('getProfile error: ', err);
-      return;
-    } else if (!profile) {
-      $timeout(function() {
-        go.logInPage();
-      }, 50);
-    }
-  });
+  $rootScope.checkProfile();
 
   this.logout = function() {
     console.info("logout...");

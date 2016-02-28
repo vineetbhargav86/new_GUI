@@ -116,6 +116,8 @@ angular.module('iguanaApp.services').factory('go',
     })
   };
 
+  $rootScope.app_config = {};
+
   storageService.getConfig(function(err, config) {
     if (err) {
       $log.debug('getConfig error: ', err);
@@ -123,6 +125,19 @@ angular.module('iguanaApp.services').factory('go',
       $rootScope.app_config = config;
     }
   });
+
+  $rootScope.checkProfile = function() {
+    storageService.getProfile(function(err, profile) {
+      if (err) {
+        $log.debug('getProfile error: ', err);
+        return;
+      } else if (!profile) {
+        $timeout(function() {
+          root.logInPage();
+        }, 50);
+      }
+    });
+  };
 
   // $rootScope.check_activeHandle = function() {
   //   naclAPI.makeRequest($rootScope.nacl_request.activehandle, function(request, response) {

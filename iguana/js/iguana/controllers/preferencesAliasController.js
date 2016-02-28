@@ -3,12 +3,12 @@
 angular.module('iguanaApp.controllers').controller('preferencesAliasController',
   function($scope, $rootScope, $timeout, $log, $state, go, storageService) {
 
-   $scope.alias = $rootScope.app_config.aliasFor || "";
-
-   $scope.save = function() {
+   this.save = function() {
+      var self = this;
+      
       $log.debug("saving...");
       
-      $rootScope.app_config.aliasFor = $scope.alias;
+      $rootScope.app_config.aliasFor = self.alias;
 
       $log.debug('app_config: ', $rootScope.app_config);
 
