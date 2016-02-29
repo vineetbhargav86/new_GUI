@@ -350,13 +350,13 @@
               ng-style="{'background-color':app_config.colorFor}">
             </div> 
           </div>
-      <div ng-show="index.needsBackup" class="p60t columns text-center">
+      <div ng-show="index.needsBackup" ng-init="home.get_btc()" class="p60t columns text-center">
         <h1>My Bitcoin address</h1>
         <div class="square-icon">
-          <span class="barcode-img"><img src="img/bar-code-img.png"></span>
+          <div id="qrcode" style="text-align: center;"></div>
         </div>
-        <h5 translate>3NQzivqeBofKCBBCnXzqMGhSsxQePQ8yBa</h5>
-        <h6><a href="#">Generate new address</a></h6>
+        <h5 translate>{{ home.btc_addr }}</h5>
+        <h6><a ng-click="home.gen_btc_addr()">Generate new address</a></h6>
         <p class="text-gray m20b columns" translate>
           Share this wallet address to receive payments. To protect your privacy, new addresses are generated automatically once you use them.
         </p>

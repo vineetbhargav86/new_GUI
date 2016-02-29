@@ -1,8 +1,66 @@
 
 'use strict';
 
-angular.module('iguanaApp.controllers').controller('walletHomeController', function($scope, $rootScope, $timeout, $filter, $modal, $log,  isCordova, isMobile,animationService, lodash, storageService, isChromeApp, gettext, nodeWebkit, go) {
- var profileService={};
+angular.module('iguanaApp.controllers').controller('walletHomeController', 
+  function($scope, $rootScope, $timeout, $filter, $modal, $log,  isCordova, isMobile, animationService, lodash, storageService, isChromeApp, gettext, nodeWebkit, go) {
+  
+  this.btc_addr = "";
+  
+  // get btc address and generate QR code for the last btc address
+  this.get_btc = function() {
+    var self = this;
+    
+    storageService.getProfile(function(err, profile) {
+      if (err) {
+        $log.debug('getProfile error:', err);
+        return;
+      } else if (profile) {
+        self.btc_addr = profile.credentials.btc_addr.pop();
+        $("#qrcode").qrcode({
+          render: 'image',
+          size: 201,
+          text: $scope.btc_addr
+        });
+        $log.debug("qrcode init: ", self.btc_addr);
+      }
+    });
+  };
+
+  this.gen_btc_addr = function() {
+    var keyPair = bitcoin.ECPair.makeRandom();
+    var address = keyPair.getAddress();
+    this.btc_addr = address;
+    var self = this;
+    storageService.getProfile(function(err, profile) {
+      if (err) {
+        $log.debug('getProfile error:', err);
+        return;
+      } else if (profile) {
+        profile.credentials.btc_addr.push(address);
+        storageService.storeProfile(profile, function(err) {
+          if (err) {
+            $log.debug('storeProfile error: ', err);
+            return;
+          } else {
+            $log.debug('profile updated: ', profile);
+            $("#qrcode").empty();
+            $("#qrcode").qrcode({
+              render: 'image',
+              size: 201,
+              text: address
+            });
+            $log.debug("qrcode generated: ", address);
+            $log.debug("address: ", self.btc_addr);
+          }
+        });
+      }
+    });
+
+    return false;
+  };
+
+
+  var profileService={};
   var self = this;
   window.ignoreMobilePause = false;
   $rootScope.hideMenuBar = false;
