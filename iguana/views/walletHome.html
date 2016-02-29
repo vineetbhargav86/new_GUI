@@ -486,7 +486,7 @@
       </div>
       <div class="row m20t">
         <div class="large-12 large-centered columns">
-          <h3>From: 3PHUShzGnw6m3QcicopJBfbrZ6PStpsPZy <span clss="close"><a href="#"><img src="img/close.png"></a></span></h3> 
+          <h3>From: {{ home.btc_addr }} <span clss="close"><a ng-click="home.goHome()"><img src="img/close.png"></a></span></h3> 
           <form name="sendForm" ng-submit="home.submitForm()" ng-disabled="home.blockUx || home.onGoingProcess" novalidate> 
 
             <div ng-hide="home._paypro || home.hideAddress">

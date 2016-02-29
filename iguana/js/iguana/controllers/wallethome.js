@@ -59,6 +59,10 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
     return false;
   };
 
+  this.goHome = function() {
+    go.walletHome();
+  };
+
 
   var profileService={};
   var self = this;
