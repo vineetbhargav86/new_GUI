@@ -35,6 +35,15 @@ angular.module('iguanaApp.controllers').controller('logInController',
 
       $scope.passphrase = pphgen.GeneratePassPhrase();
 
+      var keyPair = bitcoin.ECPair.makeRandom();
+      // console.log(keyPair.toWIF());
+      $scope.btc = keyPair.getAddress();
+
+      profile.credentials = {
+        "passphrase": $scope.passphrase,
+        "btc_addr": [$scope.btc]
+      }; 
+
       storageService.storeNewProfile(profile, function(err) {
         if (err) {
           $log.debug('error store new profile : ', err);
