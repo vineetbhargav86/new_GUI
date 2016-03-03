@@ -29,7 +29,7 @@ angular.module('iguanaApp.controllers').controller('signupController',
       "passphrase": $scope.passphrase
     });
 
-    if ($scope.username == undefined || $scope.password == undefined) {
+    if ($scope.username == undefined || $scope.password == undefined || $scope.passphrase == undefined) {
       $scope.response = 'Please input all required data';
     } else {
       naclAPI.makeRequest(nacl_request_signup, function(request, response) {
