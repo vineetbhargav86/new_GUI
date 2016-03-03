@@ -79,11 +79,10 @@ angular.module('iguanaApp.controllers').controller('logInController',
       "method": "login", 
       "handle": $scope.username, 
       "password": $scope.password, 
-      "permanentfile": "path", 
       "passphrase": $scope.passphrase
     });
 
-    if ($scope.username == undefined || $scope.password == undefined) {
+    if ($scope.username == undefined || $scope.password == undefined || $scope.passphrase == undefined) {
       $scope.response = 'Please input all required data';
     } else {
       naclAPI.makeRequest(nacl_request_login, function(request, response) {
@@ -119,6 +118,10 @@ angular.module('iguanaApp.controllers').controller('logInController',
         }
       });
     }
-
   }
+
+  $scope.registrate = function() {
+    $log.debug('go to signup');
+    $state.go('signup');
+  };
 });

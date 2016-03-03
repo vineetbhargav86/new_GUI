@@ -1,5 +1,5 @@
 <div class="splash extra-padding-bottom p20t content text-center"
-  ng-controller="logInController as logIn" ng-init="">
+  ng-controller="signUpController as snup" ng-init="">
   <div class="row">
     <div class="medium-centered small-centered large-centered columns size-14">
       <span class="text-bold text-white" translate>WELCOME TO IGUANA</span>
@@ -16,14 +16,15 @@
           </div>
           <div class="form-group">
               <label style="color:#d3d3d3" for="password" >Password
-              <input style="color:#d3d3d3" type="text" name="password" id="password" class="form-control" ng-model="password" placeholder="Type your password here" required />
+              <input style="color:#d3d3d3" type="password" name="password" id="password" class="form-control" ng-model="password" placeholder="Type your password here" required />
               </label>
           </div>
           <div class="form-actions">
-                <button type="submit" class="btn btn-primary" ng-click="signup()">Signup</button>
+                <button type="submit" class="btn btn-primary" ng-click="snup.signup()">Signup</button>
           </div>
       </form>
-      <h3 ng-show="passphrase" style="color:#fff;">These words must be saved somewhere safe <br/>
+      <h3>{{ snup.errors }}</h3>
+      <h3 style="color:#fff;">These words must be saved somewhere safe <br/>
         <strong style="text-decoration: underline;">{{ passphrase }}</strong></h3>
       </div>
   </div>
