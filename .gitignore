@@ -8,3 +8,5 @@ tmp/
 DB/
 
 includes/nanomsg/
+
+iguana.esproj/
