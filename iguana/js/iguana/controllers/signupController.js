@@ -42,7 +42,7 @@ angular.module('iguanaApp.controllers').controller('signupController',
 
           profile.credentials = {
            "passphrase": $scope.passphrase,
-           "btc_addr": "addresse",
+           "btc_addr": ["addresse"],
            "handle": $scope.username, 
            "passphrase": $scope.passphrase
           }; 
