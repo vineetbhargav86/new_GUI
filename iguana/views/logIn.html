@@ -12,7 +12,7 @@
     </div>  
     <div class="pass-window-body">
   <div class="row">
-      <div class="small-8 small-offset-2 large-10 large-offset-1 columns">
+      <div class="small-10 small-offset-1 large-10 large-offset-1 columns">
       <form name="loginForm" ng-submit="" role="form">
           <div class="form-group">
               
@@ -29,10 +29,10 @@
               <input type="password" name="passphrase" id="passphrase" class="form-control login-form-input" ng-model="write_passphrase" required />
               <label for="passphrase" class="login-form-label">Passphrase</label>
           </div>
-          <div class="form-actions">
-                <button type="button" class="btn btn-white" ng-click="registrate()">New account</button>
+          <div class="form-actions" style="margin-left:35px;">
+                <button type="button" class="btn btn-white" ng-click="logIn.signup()">New account</button>
           </div>
-          <div class="form-actions">
+          <div class="form-actions" style="float:right;">
                 <button type="submit" class="btn btn-primary" ng-click="login()">Login</button>
           </div>
       </form>
@@ -51,4 +51,5 @@
   </div> -->
   </div>
 </div>
+<div class="valign-wrapper" ng-controller="signupController as signup"></div>
 </div>

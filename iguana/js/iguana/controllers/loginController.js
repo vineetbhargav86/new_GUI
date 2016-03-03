@@ -57,6 +57,10 @@ angular.module('iguanaApp.controllers').controller('logInController',
     }
   });
   
+  this.signup = function(){
+    $rootScope.go('signup');
+  };
+  
   $scope.login = function() {
       
   //var request='{"agent":"SuperNET", "method":"login", "handle":"' + $scope.username + '", "password":"' + $scope.password + '", "permanentfile":"path", "passphrase":"sometext"}';

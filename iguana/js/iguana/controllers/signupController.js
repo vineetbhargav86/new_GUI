@@ -1,15 +1,25 @@
 'use strict';
 
-angular.module('iguanaApp.controllers').controller('signUpController',
+angular.module('iguanaApp.controllers').controller('signupController',
   function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService){
-
+  
+   $scope.passphraseConfirm = "";
+   $scope.firstStep;
+   $scope.passphrase = pphgen.GeneratePassPhrase();
    $scope.username = "";
    $scope.password = "";
    $scope.errors = "";
-   $scope.passphrase = pphgen.GeneratePassPhrase();
+
+   $scope.generatePassword = function(){
+       $scope.passphrase = pphgen.GeneratePassPhrase();
+   };
    
-   this.signup = function() {
-      var self = this;
+   $scope.backToLogin = function(){
+       $rootScope.go('logIn');
+   };
+   
+   $scope.signup = function() {
+      $scope.firstStep = false;
 
     var nacl_request_signup = angular.toJson({
       "agent": "SuperNET", 
@@ -42,7 +52,6 @@ angular.module('iguanaApp.controllers').controller('signUpController',
           storageService.storeNewProfile(profile, function(err) {
            if (err) {
              $log.debug('error store new profile : ', err);
-             self.errors = err;
              return;
            } else {
              $log.debug('store new Profile');
