@@ -22,27 +22,27 @@ angular.module('iguanaApp.controllers').controller('logInController',
   //   go.walletHome();
   // }
 
-  storageService.getProfile(function(err, profile){
-    if (err) {
-      $log.debug('getProfile error:', err);
-      return;
-    } else if (!profile) {
-      $log.debug('Profile not exists');
+  // storageService.getProfile(function(err, profile){
+  //   if (err) {
+  //     $log.debug('getProfile error:', err);
+  //     return;
+  //   } else if (!profile) {
+  //     $log.debug('Profile not exists');
 
-      profile = Profile.create();
+  //     profile = Profile.create();
 
-      storageService.storeNewProfile(profile, function(err) {
-        if (err) {
-          $log.debug('error store new profile : ', err);
-          return;
-        } else {
-          $log.debug('store new Profile');
-        }
-      });
-    } else {
-      $log.debug('Profile exists');
-    }
-  });
+  //     storageService.storeNewProfile(profile, function(err) {
+  //       if (err) {
+  //         $log.debug('error store new profile : ', err);
+  //         return;
+  //       } else {
+  //         $log.debug('store new Profile');
+  //       }
+  //     });
+  //   } else {
+  //     $log.debug('Profile exists');
+  //   }
+  // });
   
   this.signup = function(){
     $rootScope.go('signup');

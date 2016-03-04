@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('iguanaApp.services').factory('go', 
-  function($window, $rootScope, $location, $state, $log, $timeout, storageService, nodeWebkit) {
+  function($window, $rootScope, $location, $state, $log, $timeout, storageService, naclAPI, nodeWebkit) {
   var root = {};
 
   var hideSidebars = function() {
@@ -117,6 +117,7 @@ angular.module('iguanaApp.services').factory('go',
   };
 
   $rootScope.app_config = {};
+  $rootScope.activeHandle = null;
 
   storageService.getConfig(function(err, config) {
     if (err) {
@@ -126,31 +127,21 @@ angular.module('iguanaApp.services').factory('go',
     }
   });
 
-  $rootScope.checkProfile = function() {
-    storageService.getProfile(function(err, profile) {
-      if (err) {
-        $log.debug('getProfile error: ', err);
-        return;
-      } else if (!profile) {
+  $rootScope.check_activeHandle = function() {
+    naclAPI.makeRequest($rootScope.nacl_request.activehandle, function(request, response) {
+      $log.debug("SuperNET activeHandle Response:");
+      $log.debug(response.data);
+      if (response.data.handle) {
+        $log.debug("handle is: " + response.data.handle);
+        $rootScope.activeHandle = response.data.handle;
+      } else {
+        $log.debug("no handle exists: " + response.data.handle);
         $timeout(function() {
           root.logInPage();
         }, 50);
       }
     });
   };
-
-  // $rootScope.check_activeHandle = function() {
-  //   naclAPI.makeRequest($rootScope.nacl_request.activehandle, function(request, response) {
-  //     console.info("SuperNET activeHandle Response:");
-  //     console.info(response.data);
-  //     if (response.data.handle) {
-  //       console.info("handle is: " + response.data.handle);
-  //       $rootScope.activeHandle = response.data.handle;
-  //     } else {
-  //       console.info("no handle exists: " + response.data.handle);
-  //     }
-  //   });
-  // };
 
 
 
