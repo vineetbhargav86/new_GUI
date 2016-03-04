@@ -3,8 +3,6 @@
 angular.module('iguanaApp.controllers').controller('logInController',
   function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService){
 
-  $scope.passphrase = null;
-
   // $scope.check_activeHandle = function() {
   //   console.info("check activeHandle...");
   //   var nacl_request_activehandle = angular.toJson({
@@ -32,17 +30,6 @@ angular.module('iguanaApp.controllers').controller('logInController',
       $log.debug('Profile not exists');
 
       profile = Profile.create();
-
-      $scope.passphrase = pphgen.GeneratePassPhrase();
-
-      var keyPair = bitcoin.ECPair.makeRandom();
-      // console.log(keyPair.toWIF());
-      $scope.btc = keyPair.getAddress();
-
-      profile.credentials = {
-        "passphrase": $scope.passphrase,
-        "btc_addr": [$scope.btc]
-      }; 
 
       storageService.storeNewProfile(profile, function(err) {
         if (err) {
@@ -92,33 +79,35 @@ angular.module('iguanaApp.controllers').controller('logInController',
       naclAPI.makeRequest(nacl_request_login, function(request, response) {
         if (response.data.result == "success") {
           $scope.response = response.data;
-          console.info("SuperNet login Response: ");
-          console.info(response.data);
+          $log.debug("SuperNet login Response: ");
+          $log.debug(response.data);
           $rootScope.activeHandle = response.data.handle;
-          console.info('login page - activeHandle: ' + $rootScope.activeHandle);
+          $log.debug('login page - activeHandle: ' + $rootScope.activeHandle);
 
-          storageService.getProfile(function(err, profile) {
-            if (err) {
-              $log.debug('getProfile error:', err);
-              return;
-            } else {
-              profile.credentials.handle = $scope.username;
-              profile.credentials.permanentfile = "path";
+          // storageService.getProfile(function(err, profile) {
+          //   if (err) {
+          //     $log.debug('getProfile error:', err);
+          //     return;
+          //   } else if (profile.credentials.handle == undefined) {
+          //     profile.credentials.handle = $scope.username;
+          //     profile.credentials.btc_addr = [response.data.BTC];
+          //     profile.credentials.contacts = [];
+          //     $log.debug("init contacts", profile.credentials.contacts)
               
-              storageService.storeProfile(profile, function(err) {
-                if (err) {
-                  $log.debug('storeProfile error: ', err);
-                  return;
-                } else {
-                  $log.debug('profile updated');
-                }
-              });
+          //     storageService.storeProfile(profile, function(err) {
+          //       if (err) {
+          //         $log.debug('storeProfile error: ', err);
+          //         return;
+          //       } else {
+          //         $log.debug('profile updated');
+          //       }
+          //     });
+          //   }
 
-              $timeout(function(){
-                go.walletHome();
-              }, 50);
-            }
-          });
+            $timeout(function(){
+              go.walletHome();
+            }, 50);
+          // });
         }
       });
     }

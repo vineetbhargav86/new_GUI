@@ -1,29 +1,29 @@
 <div ng-init="wallets[0] ? selectedWalletsOpt = true : selectedWalletsOpts = false">
-  <nav class="tab-bar" ng-style="{'background-color':color}">
+  <nav class="tab-bar" ng-style="{'background-color': noColor ? '#4B6178' : app_config.colorFor}">
     <section class="left-small">
-      <a ng-show="!editAddressbook && !addAddressbookEntry" ng-click="cancel()" class="p10">
+      <a ng-click="cancel()" class="p10">
         <span class="text-close" translate>Close</span>
       </a>
     </section>
 
     <section class="middle tab-bar-section">
       <h1 class="title ellipsis">
-      {{walletName}}
+      My Contacts
       </h1>
     </section>
 
-    <section class="right-small" ng-show="!selectedWalletsOpt" ng-click="toggleEditAddressbook()">
+    <!-- <section class="right-small" ng-show="!selectedWalletsOpt" ng-click="toggleEditAddressbook()">
       <a ng-show="!editAddressbook && !addAddressbookEntry" href class="p10">
         <span class="text-close" translate>Edit</span>
       </a>
       <a ng-show="editAddressbook && !addAddressbookEntry" href class="p10">
         <span class="text-close" translate>Done</span>
       </a>
-    </section>
+    </section> -->
   </nav>
 
   <div class="modal-content fix-modals-touch p20b">
-    <div class="create-tab small-only-text-center" ng-show="!editAddressbook && !addAddressbookEntry">
+<!--     <div class="create-tab small-only-text-center" ng-show="!editAddressbook && !addAddressbookEntry">
       <div class="row">
         <div class="tab-container small-6 medium-3 large-2" 
           ng-class="{'selected':selectedWalletsOpt}" 
@@ -42,7 +42,7 @@
           ng-click="create.setTotalCopayers(3)" translate>My contacts</a>
         </div>
       </div>
-    </div>
+    </div> -->
     
     <div class="avatar-name columns">
             <div class="avatar-wallet left"
@@ -84,8 +84,8 @@
     </div>
 
     <div ng-show="!selectedWalletsOpt" class="m20b">
-      <ul ng-show="!addAddressbookEntry" class="no-bullet m0" ng-init="list()">
-        <li class="p10 line-b" ng-repeat="(addr, label) in list">
+      <ul ng-show="!addAddressbookEntry" class="no-bullet m0" ng-init="getList()">
+<!--         <li class="p10 line-b" ng-repeat="(addr, label) in list">
           <a ng-show="selectedAddressbook[addr]" 
             class="removeAddressbook" 
             ng-click="remove(addr)" translate>Remove</a>
@@ -101,17 +101,21 @@
               <div class="size-12 text-gray ellipsis">{{addr}}</div>
             </div>
           </div> 
-        </li>
-        <li class="p10">
-          <h3>Bob<br/><span class="size-12 tu" translate>Bitcoin Address</span></h3>
+        </li> -->
+        <li class="p10" ng-repeat="addr in list track by $index">
+          <h3>{{addr.label}}<br/><span class="size-12 tu" translate>{{addr.address}}</span></h3>
           <ul class="controls">
             <li>
               <span class="size-12 tu" translate>Copy</span><br/>
-               <a href="#"><i class="fi-page-copy size-24 m20r lh icon"></i></a>
+               <a ng-click="selectAddressbook(addr.address)">
+                 <i class="fi-page-copy size-24 m20r lh icon"></i>
+               </a>
             </li>
             <li>
               <span class="size-12 tu" translate>Remove</span><br/>
-               <a href="#"><i class="fi-minus size-24 m20r lh icon"></i></a>
+               <a ng-click="remove($index)">
+                 <i class="fi-minus size-24 m20r lh icon"></i>
+               </a>
             </li>
           </ul>
         </li>
@@ -119,7 +123,7 @@
           <a ng-click="toggleAddAddressbookEntry()" class="p0i">
             <i class="fi-plus size-24 m20r lh icon"></i> 
             <span class="size-12 tu text-bold" translate>Add a new entry</span>
-            <span ng-show="!list[newAddress] && newAddress">({{newAddress}})</span>
+<!--             <span ng-show="!list[newAddress] && newAddress">({{newAddress}})</span> -->
           </a>
         </li>
        

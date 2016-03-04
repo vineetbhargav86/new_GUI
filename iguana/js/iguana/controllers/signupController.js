@@ -41,10 +41,11 @@ angular.module('iguanaApp.controllers').controller('signupController',
           var profile = Profile.create();
 
           profile.credentials = {
-           "passphrase": $scope.passphrase,
-           "btc_addr": ["addresse"],
            "handle": $scope.username, 
-           "passphrase": $scope.passphrase
+           "password": $scope.password,
+           "passphrase": $scope.passphrase,
+           "btc_addr": [response.data.BTC],
+           "contacts": []
           }; 
 
           storageService.deleteProfile();

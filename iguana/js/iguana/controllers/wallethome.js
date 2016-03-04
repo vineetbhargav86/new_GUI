@@ -176,7 +176,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
 
   this.openDestinationAddressModal = function(wallets, address) {
     $rootScope.modalOpened = true;
-    var fc = profileService.focusedClient;
+    // var fc = profileService.focusedClient;
     self.lockAddress = false;
     self._address = null;
 
@@ -186,8 +186,8 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
       $scope.addAddressbookEntry = false;
       $scope.selectedAddressbook = {};
       $scope.newAddress = address;
-      $scope.walletName = fc.credentials.walletName;
-      $scope.color = fc.backgroundColor;
+      // $scope.walletName = fc.credentials.walletName;
+      // $scope.color = fc.backgroundColor;
       $scope.addressbook = {
         'address': ($scope.newAddress || ''),
         'label': ''
@@ -235,45 +235,87 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
         $scope.addAddressbookEntry = !$scope.addAddressbookEntry;
       };
 
-      $scope.list = function() {
+      $scope.getList = function() {
         $scope.error = null;
-        addressbookService.list(function(err, ab) {
+        storageService.getProfile(function(err, profile) {
           if (err) {
             $scope.error = err;
+            $log.debug('getProfile error:', err);
             return;
+          } else {
+            $scope.list = profile.credentials.contacts;
+            $scope.$digest();
           }
-          $scope.list = ab;
         });
+        // addressbookService.list(function(err, ab) {
+        //   if (err) {
+        //     $scope.error = err;
+        //     return;
+        //   }
+        //   $scope.list = ab;
+        // });
       };
 
       $scope.add = function(addressbook) {
         $scope.error = null;
         $timeout(function() {
-          addressbookService.add(addressbook, function(err, ab) {
+          storageService.getProfile(function(err, profile) {
             if (err) {
-              $scope.error = err;
+              $log.debug('getProfile error:', err);
               return;
+            } else {
+              $log.debug("addressbook: ", addressbook);
+              $log.debug("contacts: ", profile.credentials.contacts);
+              profile.credentials.contacts.push(addressbook);
+              storageService.storeProfile(profile, function(err) {
+                if (err) {
+                  $log.debug('storeProfile error: ', err);
+                  return;
+                } else {
+                  $log.debug('profile updated');
+                }
+              });
+              $rootScope.$emit('Local/AddressbookUpdated', profile.credentials.contacts);
+              $scope.list = profile.credentials.contacts;
+              $scope.editAddressbook = true;
+              $scope.toggleEditAddressbook();
+              $scope.$digest();
             }
-            $rootScope.$emit('Local/AddressbookUpdated', ab);
-            $scope.list = ab;
-            $scope.editAddressbook = true;
-            $scope.toggleEditAddressbook();
-            $scope.$digest();
           });
+          // addressbookService.add(addressbook, function(err, ab) {
+          //   if (err) {
+          //     $scope.error = err;
+          //     return;
+          //   }
+          //   $rootScope.$emit('Local/AddressbookUpdated', ab);
+          //   $scope.list = ab;
+          //   $scope.editAddressbook = true;
+          //   $scope.toggleEditAddressbook();
+          //   $scope.$digest();
+          // });
         }, 100);
       };
 
-      $scope.remove = function(addr) {
+      $scope.remove = function(index) {
         $scope.error = null;
         $timeout(function() {
-          addressbookService.remove(addr, function(err, ab) {
+          storageService.getProfile(function(err, profile) {
             if (err) {
-              $scope.error = err;
+              $log.debug('getProfile error:', err);
               return;
+            } else {
+              profile.credentials.contacts.splice(index, 1);
+              storageService.storeProfile(profile, function(err) {
+                if (err) {
+                  $log.debug('storeProfile error: ', err);
+                  return;
+                } else {
+                  $log.debug('profile updated');
+                }
+              });
+              $scope.list = profile.credentials.contacts;
+              $scope.$digest();
             }
-            $rootScope.$emit('Local/AddressbookUpdated', ab);
-            $scope.list = ab;
-            $scope.$digest();
           });
         }, 100);
       };
