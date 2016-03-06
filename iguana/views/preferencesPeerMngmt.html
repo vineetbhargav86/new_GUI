@@ -1,10 +1,10 @@
 <div 
   class="topbar-container" 
   ng-include="'views/includes/topbar.html'"
-  ng-init="titleSection='Peer Management'; goBackToState = 'preferencesAdvanced'">
+  ng-init="titleSection='Peer Management'; goBackToState = 'preferencesAdvanced';index.showPeerFavorites=true;">
 </div>
 
-<div class="content preferences advanced" ng-controller="preferencesPeerMngmt as peer">
+<div class="content preferences advanced" ng-controller="preferencesPeerController as peer">
 
 <table class="peer_management_table">
   <tr class="peer_management_table_header">

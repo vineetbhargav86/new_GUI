@@ -2,8 +2,8 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('preferencesController',
-  function($scope, $rootScope, $timeout, $log) {
-
+  function($scope, $rootScope, $timeout, $log, storageService) {
+    var self = this;
     //var fc = profileService.focusedClient;
     $scope.deleted = false;
     //if (fc.credentials && !fc.credentials.mnemonicEncrypted && !fc.credentials.mnemonic) {
@@ -73,10 +73,10 @@ angular.module('iguanaApp.controllers').controller('preferencesController',
       }
       //var walletId = profileService.focusedClient.credentials.walletId;
 
-      var opts = {
+      $rootScope.app_config = {
         touchIdFor: {}
       };
-      //opts.touchIdFor[walletId] = newVal;
+      opts.touchIdFor[walletId] = newVal;
 
       $rootScope.$emit('Local/RequestTouchid', function(err) {
         if (err) {
@@ -93,6 +93,14 @@ angular.module('iguanaApp.controllers').controller('preferencesController',
               $scope.touchid = oldVal;
             }
           });*/
+
+        storageService.storeConfig($rootScope.app_config, function(err) {
+          if (err) {
+            $log.debug(err);
+          }
+          $scope.touchidError = true;
+          $scope.touchid = oldVal;
+      });
         }
       });
     });

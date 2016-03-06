@@ -161,6 +161,10 @@ angular.module('iguanaApp.controllers').controller('indexController',
     self.usingCustomBWS = config.bwsFor && config.bwsFor[self.walletId] && (config.bwsFor[self.walletId] != defaults.bws.url);
   };*/
 
+  self.changeFavorite = function(){
+    $rootScope.peerFavorites = this.peerFavorites;
+  };
+
   self.acceptDisclaimer = function() {
     var profile = profileService.profile;
     if (profile) profile.disclaimerAccepted = true;

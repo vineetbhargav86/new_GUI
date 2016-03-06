@@ -1,7 +1,7 @@
 <div 
   class="topbar-container" 
   ng-include="'views/includes/topbar.html'"
-  ng-init="titleSection='Advanced'; goBackToState = 'preferences'">
+  ng-init="titleSection='Advanced'; goBackToState = 'preferences';index.showPeerFavorites=false;">
 </div>
 <!-- 30 jan 2016 -->
 <div class="content preferences advanced" ng-controller="preferencesAdvancedController as preferences">
@@ -15,7 +15,7 @@
       <div translate>Wallet Information</div>
     </li>
 
-    <li ng-show="index.network == 'livenet'" ng-click="$root.go('paperWallet')">
+    <li ng-click="$root.go('paperWallet')">
       <i class="icon-arrow-right3 size-24 right text-gray"></i>  
       <div translate>Sweep paper wallet</div>
     </li>

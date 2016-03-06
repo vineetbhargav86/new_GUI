@@ -2,7 +2,7 @@
   class="tab-bar" 
   ng-style="{'background-color': noColor ? '#4B6178' : app_config.colorFor}">
   <section class="left-small">
-    <a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome  && !index.noFocusedWallet"
+    <a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome && !closeToPref  && !index.noFocusedWallet"
       ng-click="index.openMenu()"><!--i class="fi-list size-24"></i-->Iguana
     </a>
     <a ng-show="goBackToState"
@@ -12,6 +12,11 @@
 
     <a ng-show="closeToHome" class="p10 "
       ng-click="topbar.goHome(); closeToHome = null">
+      <span class="text-close">{{'Close'|translate}}</span>
+    </a>
+
+    <a ng-show="closeToPref" class="p10 "
+      ng-click="topbar.goPreferences(); closeToPref = null">
       <span class="text-close">{{'Close'|translate}}</span>
     </a>
   </section>
@@ -31,13 +36,13 @@
     <a class="right" ng-show="activeHandle" ng-click="topbar.logout()">
       <i class="fa fa-sign-out fa-lg"></i>
     </a>
-    <a class="p10" ng-click="topbar.goHome()">
+    <a class="p10" ng-show="!index.isAtHome" ng-click="topbar.goHome()">
       <i class="fi-home size-24"></i>
     </a>
   </section>
-  <section class="right-small peer_favorites" ng-show="showPeerFavorites">
+  <section class="right-small peer_favorites" ng-show="index.showPeerFavorites">
     <label for="favorites">Favorites</label>
-    <input type="checkbox" name="favorites" id="favorites" ng-change="topbar.changeFavorite()" ng-model="topbar.peerFavorites"/>
+    <input type="checkbox" name="favorites" id="favorites" ng-change="index.changeFavorite()" ng-model="index.peerFavorites"/>
   </section>
   
 </nav>

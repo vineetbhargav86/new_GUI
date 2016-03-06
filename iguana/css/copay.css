@@ -2776,9 +2776,9 @@ touch-action: manipulation; /* IE11+ */
 .bottom-bar .bottombar-item { float: none; display:inline-block;}
 .bottom-bar .bottombar-item span.ng-binding { font-size: 18px;}
 .bottom-bar .bottombar-item:nth-child(2) {
-  position: absolute;
+    position: absolute;
+    left: 33%;
     margin-top: -49px;
-    margin-left: 429px;
     z-index: 2;
 }
 

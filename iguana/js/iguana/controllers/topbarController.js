@@ -37,8 +37,4 @@ angular.module('iguanaApp.controllers').controller('topbarController',
       $rootScope.showPeerFavorites = false;
   };
   
-  this.changeFavorite = function(){
-    $rootScope.peerFavorites = this.peerFavorites;
-  };
-  
 });

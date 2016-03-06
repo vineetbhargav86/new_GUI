@@ -1502,6 +1502,7 @@ angular.module('copayApp.services').factory('animationService', function(isCordo
     preferencesAltCurrency: 12,
     preferencesBwsUrl: 13,
     preferencesHistory: 13,
+    preferencesPeerMngmt: 13,
     preferencesAlias: 12,
     preferencesEmail: 12,
     export: 13,
@@ -9574,8 +9575,7 @@ angular.module('copayApp.controllers').controller('preferencesUnitController',
 
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesPeerMngmt', function($scope, $rootScope){
-  $rootScope.showPeerFavorites = true;
+angular.module('copayApp.controllers').controller('preferencesPeerController', function($scope, $rootScope){
   this.favor1 = true;
   this.favor3 = true;
    
