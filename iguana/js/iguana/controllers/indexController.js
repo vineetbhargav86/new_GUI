@@ -39,12 +39,15 @@ angular.module('iguanaApp.controllers').controller('indexController',
       reconnectDelay: 5000,
       idleDurationMin: 4,
       settings: {
-        unitName: 'bits',
-        unitToSatoshi: 100,
-        unitDecimals: 2,
-        unitCode: 'bit',
+        unitName: 'BTC',
+        unitToSatoshi: 100000000,
+        unitDecimals: 8,
+        unitCode: 'btc',
         alternativeName: 'US Dollar',
         alternativeIsoCode: 'USD',
+        defaultLanguage: 'en',
+        defaultLanguageName: 'English',
+        feeLevel: 'normal'
       }
     },
 
