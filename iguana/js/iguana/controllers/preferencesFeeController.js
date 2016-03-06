@@ -1,16 +1,11 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('preferencesFeeController',
-  function($rootScope, go, storageService) {
+  function($rootScope, $scope, $log, $timeout, go, storageService) {
 
     this.save = function(newFee) {
-     $rootScope.app_config = {
-        wallet: {
-          settings: {
-            feeLevel: newFee
-          }
-        }
-      };
+     $rootScope.app_config.wallet.settings.feeLevel = newFee;
+     
       $rootScope.$emit('Local/FeeLevelUpdated', newFee);
 
        $log.debug('app_config: ', $rootScope.app_config);

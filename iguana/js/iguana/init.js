@@ -497,18 +497,6 @@ angular
 
         }
       })
-      .state('preferencesBwsUrl', {
-        url: '/preferencesBwsUrl',
-        templateUrl: 'views/preferencesBwsUrl.html',
-        walletShouldBeComplete: true,
-        needProfile: true,
-        views: {
-          'main': {
-            templateUrl: 'views/preferencesBwsUrl.html'
-          },
-
-        }
-      })
       .state('preferencesHistory', {
         url: '/preferencesHistory',
         templateUrl: 'views/preferencesHistory.html',

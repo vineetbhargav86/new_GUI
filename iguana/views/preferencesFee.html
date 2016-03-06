@@ -6,7 +6,7 @@
 <div class="content preferences" ng-controller="preferencesFeeController as prefFee">
   <h4></h4>
   <ul class="no-bullet m0"> 
-    <li ng-repeat="fee in (index.network == 'livenet' ? index.feeLevels.livenet : index.feeLevels.testnet)"
+    <li ng-repeat="fee in [{level: 'priority'}, {level: 'normal'}, {level: 'economy'}]"
       ng-click="prefFee.save(fee.level)">
       {{index.feeOpts[fee.level]|translate}}
       <i class="fi-check size-16 right" ng-show="index.currentFeeLevel == fee.level"></i>
@@ -25,7 +25,7 @@
 
   <div class="row m20t">
     <div class="text-gray size-12 text-center" translate>
-      Bitcoin transactions may include a fee collected by miners on the network. The higher the fee, the greater the incentive a miner has to include that transaction in a block. Actual fees are determined based on network load and the selected policy.
+    Transactions may include a fee collected by miners on the network. The higher the fee, the more likely the transaction will be included in the next block leading to faster confirmation times.
     </div>
   </div>
 </div>

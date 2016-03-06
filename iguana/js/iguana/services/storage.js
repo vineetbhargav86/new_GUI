@@ -155,9 +155,11 @@ angular.module('iguanaApp.services').factory('fileStorageService',
 'use strict';
 
 angular.module('iguanaApp.services').factory('localStorageService', 
-  function(isChromeApp, nodeWebkit, $timeout) {
+  function($rootScope, isChromeApp, nodeWebkit, $timeout) {
   
   var root = {};
+
+ 
   var ls = ((typeof window.localStorage !== "undefined") ? window.localStorage : null);
 
   if (isChromeApp && !nodeWebkit.isDefined() && !ls) {
@@ -224,7 +226,7 @@ angular.module('iguanaApp.services').factory('localStorageService',
 'use strict';
 
 angular.module('iguanaApp.services').factory('storageService', 
-  function(logHeader, fileStorageService, localStorageService, $log, lodash, isCordova) {
+  function($rootScope, logHeader, fileStorageService, localStorageService, $log, lodash, isCordova) {
 
   var root = {};
 

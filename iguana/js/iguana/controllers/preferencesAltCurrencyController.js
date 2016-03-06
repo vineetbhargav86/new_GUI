@@ -15,7 +15,11 @@ angular.module('iguanaApp.controllers').controller('preferencesAltCurrencyContro
       isoCode: $rootScope.app_config.wallet.settings.alternativeIsoCode
     };
 
-    this.alternativeOpts = [this.selectedAlternative]; //default value
+    this.alternativeOpts = [
+        {name: 'US Dollar', isoCode: 'USD'},
+        {name: 'Euro Zone Euro', isoCode: 'EUR'},
+        {name: 'Pound Sterling', isoCode: 'GBP'}                     
+        ]; //default value
 
     var self = this;
     // rateService.whenAvailable(function() {
@@ -34,14 +38,8 @@ angular.module('iguanaApp.controllers').controller('preferencesAltCurrencyContro
 
 
     this.save = function(newAltCurrency) {
-      $rootScope.app_config = {
-        wallet: {
-          settings: {
-            alternativeName: newAltCurrency.name,
-            alternativeIsoCode: newAltCurrency.isoCode,
-          }
-        }
-      };
+      $rootScope.app_config.wallet.settings.alternativeName = newAltCurrency.name;
+      $rootScope.app_config.wallet.settings.alternativeIsoCode = newAltCurrency.isoCode;
 
       this.selectedAlternative = {
         name: newAltCurrency.name,

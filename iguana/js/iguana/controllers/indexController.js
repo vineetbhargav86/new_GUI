@@ -18,7 +18,47 @@ angular.module('iguanaApp.controllers').controller('indexController',
   // Setting just to get QrScanner
     self.isComplete = true;
     self.needsBackup = true;
-    
+
+  $rootScope.app_config = {
+    // wallet limits
+    limits: {
+      totalCopayers: 6,
+      mPlusN: 100,
+    },
+
+    // Bitcore wallet service URL
+    bws: {
+      url: 'https://bws.bitpay.com/bws/api',
+    },
+
+    // wallet default config
+    wallet: {
+      requiredCopayers: 2,
+      totalCopayers: 3,
+      spendUnconfirmed: true,
+      reconnectDelay: 5000,
+      idleDurationMin: 4,
+      settings: {
+        unitName: 'bits',
+        unitToSatoshi: 100,
+        unitDecimals: 2,
+        unitCode: 'bit',
+        alternativeName: 'US Dollar',
+        alternativeIsoCode: 'USD',
+      }
+    },
+
+    // External services
+    glidera: {
+      enabled: true,
+      testnet: false
+    },
+
+    rates: {
+      url: 'https://insight.bitpay.com:443/api/rates',
+    },
+  };
+
   function strip(number) {
     return (parseFloat(number.toPrecision(12)));
   };
@@ -48,7 +88,11 @@ angular.module('iguanaApp.controllers').controller('indexController',
 
   self.tab = 'walletHome';
 
-  //self.feeOpts = feeService.feeOpts;
+  self.feeOpts = {
+    priority: 'Priority (high fee)',
+    normal: 'Normal (normal fee)',
+    economy: 'Economy (low fee)'
+  };;
 
   self.setOngoingProcess = function(processName, isOn) {
     $log.debug('onGoingProcess', processName, isOn);

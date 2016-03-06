@@ -9,7 +9,10 @@ angular.module('iguanaApp.controllers').controller('preferencesController',
     //if (fc.credentials && !fc.credentials.mnemonicEncrypted && !fc.credentials.mnemonic) {
      // $scope.deleted = true;
     //}
-
+    this.currentLanguageName = $rootScope.app_config.wallet.settings.defaultLanguageName;
+    this.unit = {unitName: $rootScope.app_config.wallet.settings.unitName};
+    this.selectedAlternative = {name: $rootScope.app_config.wallet.settings.alternativeName};
+    this.currentFeeLevel = $rootScope.app_config.wallet.settings.feeLevel;
     this.init = function() {
       //var config = configService.getSync();
       //var fc = profileService.focusedClient;
@@ -73,9 +76,7 @@ angular.module('iguanaApp.controllers').controller('preferencesController',
       }
       //var walletId = profileService.focusedClient.credentials.walletId;
 
-      $rootScope.app_config = {
-        touchIdFor: {}
-      };
+      $rootScope.app_config.touchIdFor = {};
       opts.touchIdFor[walletId] = newVal;
 
       $rootScope.$emit('Local/RequestTouchid', function(err) {
