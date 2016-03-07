@@ -84,6 +84,31 @@ angular.module('iguanaApp.controllers').controller('logInController',
           $rootScope.activeHandle = response.data.handle;
           $log.debug('login page - activeHandle: ' + $rootScope.activeHandle);
 
+          storageService.getProfile(function(err, profile) {
+            if (err) {
+              $log.debug('getProfile error:', err);
+              return;
+            } else if (profile) {
+              $log.debug("profile; ", profile);
+            } else {
+              profile = Profile.create();
+              profile.credentials = {
+               "handle": $scope.username, 
+               "passphrase": $scope.passphrase,
+               "btc_addr": [response.data.BTC],
+               "contacts": []
+              };
+              storageService.storeNewProfile(profile, function(err) {
+                if (err) {
+                  $log.debug('error store new profile : ', err);
+                  return;
+                } else {
+                  $log.debug('store new Profile: ', profile);
+                }
+              });
+            }
+          });
+
           // storageService.getProfile(function(err, profile) {
           //   if (err) {
           //     $log.debug('getProfile error:', err);
