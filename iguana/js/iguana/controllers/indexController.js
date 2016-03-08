@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('indexController', 
-  function($rootScope, $scope, $http, $log, $filter, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, go, isCordova, storageService, $state, isMobile) {
+  function($rootScope, $scope, $http, $log, $filter, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile) {
   
   var self = this;
   var SOFT_CONFIRMATION_LIMIT = 12;
@@ -61,6 +61,17 @@ angular.module('iguanaApp.controllers').controller('indexController',
       url: 'https://insight.bitpay.com:443/api/rates',
     },
   };
+
+  storageService.getConfig(function(err, config) {
+    if (err) {
+      $log.debug('getConfig error: ', err);
+    } else if (config) {
+      $rootScope.app_config = config;
+      uxLanguage.update(function(lang) {
+        $log.debug('LangUpdated: ', lang);
+      });
+    }
+  });
 
   function strip(number) {
     return (parseFloat(number.toPrecision(12)));

@@ -116,16 +116,7 @@ angular.module('iguanaApp.services').factory('go',
     })
   };
 
-  $rootScope.app_config = {};
   $rootScope.activeHandle = null;
-
-  storageService.getConfig(function(err, config) {
-    if (err) {
-      $log.debug('getConfig error: ', err);
-    } else if (config) {
-      $rootScope.app_config = config;
-    }
-  });
 
   $rootScope.check_activeHandle = function() {
     naclAPI.makeRequest($rootScope.nacl_request.activehandle, function(request, response) {
@@ -142,8 +133,6 @@ angular.module('iguanaApp.services').factory('go',
       }
     });
   };
-
-
 
   return root;
 });
