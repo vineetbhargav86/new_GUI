@@ -432,6 +432,16 @@ angular
           },
         }
       })
+      .state('walletConfig', {
+        url: '/walletConfig',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/preferencesWalletConfiguration.html'
+          },
+        }
+      })
       .state('about', {
         url: '/about',
         templateUrl: 'views/preferencesAbout.html',

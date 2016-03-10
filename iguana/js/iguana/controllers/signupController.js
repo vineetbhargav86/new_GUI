@@ -41,7 +41,10 @@ angular.module('iguanaApp.controllers').controller('signupController',
           var profile = Profile.create();
 
           profile.credentials = {
-           "btc_addr": [response.data.BTC],
+           "handle": response.data.handle,
+           "btc": response.data.BTC,
+           "btcd": response.data.BTCD,
+           "btc_addr": [response.data.BTCD],
            "contacts": []
           }; 
 

@@ -19,6 +19,8 @@ angular.module('iguanaApp.controllers').controller('indexController',
     self.isComplete = true;
     self.needsBackup = true;
 
+    self.defaultWalletConfig = '1-1';
+
   $rootScope.app_config = {
     // wallet limits
     limits: {
@@ -39,15 +41,16 @@ angular.module('iguanaApp.controllers').controller('indexController',
       reconnectDelay: 5000,
       idleDurationMin: 4,
       settings: {
-        unitName: 'BTC',
+        unitName: 'BTCD',
         unitToSatoshi: 100000000,
         unitDecimals: 8,
-        unitCode: 'btc',
+        unitCode: 'btcd',
         alternativeName: 'US Dollar',
         alternativeIsoCode: 'USD',
         defaultLanguage: 'en',
         defaultLanguageName: 'English',
-        feeLevel: 'normal'
+        feeLevel: 'normal',
+        wconfig: '1-1'
       }
     },
 
@@ -66,6 +69,7 @@ angular.module('iguanaApp.controllers').controller('indexController',
     if (err) {
       $log.debug('getConfig error: ', err);
     } else if (config) {
+      config.wallet.settings.wconfig = self.defaultWalletConfig;
       $rootScope.app_config = config;
       uxLanguage.update(function(lang) {
         $log.debug('LangUpdated: ', lang);

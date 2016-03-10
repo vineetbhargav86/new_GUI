@@ -23,10 +23,10 @@
         </span>
       </li>
 
-      <li class="line-b p20 oh">
+      <li class="line-b p20 oh" ng-click="$root.go('walletConfig')">
         <span translate>Wallet Configuration (m-n)</span>
         <span class="right text-gray">
-          {{M}}-{{N}}
+          {{walletConfig}}
         </span>
       </li>
 
@@ -104,40 +104,19 @@
     
     <div ng-show="addrs">
       <h4 class="title m0" translate>Last Wallet Addresses</h4>
-      <ul class="no-bullet m0">
-        <li ng-repeat="a in addrs" class="oh">
-          <div class="enable_text_select ellipsis">
-            {{a.address}} 
-          </div>
-          <div class="text-gray size-12 right enable_text_select">
-            {{a.path}} &middot;  {{a.createdOn *1000  | amDateFormat:'MMMM Do YYYY, h:mm a' }}
-          </div>
-        </li>
-      </ul>
       <div class="text-centered space text-gray size-12" translate>
         Only Main (not change) addresses are shown.<br/> 
         <h4 class="title m0" translate>Balance By Addresses</h4>
         <!--The addresses on this list were not verified locally at this time.-->
         <ul class="no-bullet m0">
-        <li class="oh ng-scope">
+        <li class="oh ng-scope" ng-repeat="a in addrs">
           <div class="small-8 columns enable_text_select text-black ellipsis ng-binding">
-             3KGdS7YJNx8HM5m7mXWW63ZMhGtjqgxE4i<br/>
-            <span class="text-gray text-right">0.34931002 BTC</span>
+            {{a}}<br/>
+            <span class="text-gray text-right">0 BTC</span>
           </div>
           <div class="text-gray size-12 right enable_text_select">
             <span class="new-btn">
-              <a href="#">Send from this address</a>
-            </span>
-          </div>
-        </li>
-        <li class="oh ng-scope">
-          <div class="small-8 columns enable_text_select text-black ellipsis ng-binding">
-            3KGdS7YJNx8HM5m7mXWW63ZMhGtjqgxE4i<br/>
-            <span class="text-gray text-right">0.34931002 BTC</span>
-          </div>
-          <div class="text-gray size-12 right enable_text_select">
-            <span class="new-btn">
-              <a href="#">Send from this address</a>
+              <a ng-click="info.send(a)">Send from this address</a>
             </span>
           </div>
         </li>

@@ -80,6 +80,10 @@ angular.module('iguanaApp.services').factory('go',
     $state.go('preferences');
   };
 
+  root.information = function() {
+    $state.go('information');
+  };
+
   root.logInPage = function() {
     $state.go('logIn');
   };

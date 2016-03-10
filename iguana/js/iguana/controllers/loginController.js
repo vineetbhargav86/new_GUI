@@ -97,7 +97,10 @@ angular.module('iguanaApp.controllers').controller('logInController',
             } else if (!profile) {
               profile = Profile.create();
               profile.credentials = {
-               "btc_addr": [response.data.BTC],
+               "handle": response.data.handle,
+               "btcd": response.data.BTCD,
+               "btc": response.data.BTC,
+               "btc_addr": [response.data.BTCD],
                "contacts": []
               };
             }

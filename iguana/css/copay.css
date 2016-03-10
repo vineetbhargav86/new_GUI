@@ -3041,7 +3041,7 @@ touch-action: manipulation; /* IE11+ */
     background-repeat: no-repeat;
     height: 100px;
     background-color: #263238;
-    background-image: url(/images/logo-white.png);
+    /*background-image: url(/images/logo-white.png);*/
     margin: -1px;
     border-radius: 4px 4px 0 0;
     background-position: center;

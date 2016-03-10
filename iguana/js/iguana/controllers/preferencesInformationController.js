@@ -1,46 +1,55 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('preferencesInformationController',
-  function($scope, $log, $timeout, isMobile, gettextCatalog, lodash, profileService, storageService, go) {
+  function($rootScope, $scope, $log, $timeout, isMobile, gettextCatalog, lodash, storageService, go) {
     var base = 'xpub';
-    var fc = profileService.focusedClient;
-    var c = fc.credentials;
 
     this.init = function() {
-      var basePath = c.getBaseAddressDerivationPath();
 
-      $scope.walletName = c.walletName;
-      $scope.walletId = c.walletId;
-      $scope.network = c.network;
-      $scope.addressType = c.addressType || 'P2SH';
-      $scope.derivationStrategy = c.derivationStrategy || 'BIP45';
-      $scope.basePath = basePath;
-      $scope.M = c.m;
-      $scope.N = c.n;
-      $scope.pubKeys = lodash.pluck(c.publicKeyRing, 'xPubKey');
-      $scope.addrs = null;
+      $scope.walletConfig = $rootScope.app_config.wallet.settings.wconfig;
 
-      fc.getMainAddresses({
-        doNotVerify: true
-      }, function(err, addrs) {
+      storageService.getProfile(function(err, profile) {
         if (err) {
-          $log.warn(err);
+          $log.debug('getProfile error:', err);
           return;
-        };
-        var last10 = [],
-          i = 0,
-          e = addrs.pop();
-        while (i++ < 10 && e) {
-          e.path = base + e.path.substring(1);
-          last10.push(e);
-          e = addrs.pop();
+        } else {
+          $scope.walletName = profile.credentials.handle;
+          $scope.walletId = profile.credentials.btcd;
+          // $scope.network = c.network;
+          // $scope.addressType = c.addressType || 'P2SH';
+          // $scope.derivationStrategy = c.derivationStrategy || 'BIP45';
+          // $scope.basePath = basePath;
+          // $scope.M = c.m;
+          // $scope.N = c.n;
+          // $scope.pubKeys = lodash.pluck(c.publicKeyRing, 'xPubKey');
+          $scope.addrs = null;
         }
-        $scope.addrs = last10;
-        $timeout(function() {
-          $scope.$apply();
-        });
-
       });
+
+      storageService.getProfile(function(err, profile){
+        if (err) {
+          $log.debug('getProfile error:', err);
+          return;
+        } else {
+          var last10 = [],
+            i = 0,
+            e = profile.credentials.btc_addr.pop();
+          while (i++ < 10 && e) {
+            // e.path = base + e.path.substring(1);
+            last10.push(e);
+            e = profile.credentials.btc_addr.pop();
+          }
+          $scope.addrs = last10;
+          $log.debug("addrs: ", $scope.addrs);
+          $timeout(function() {
+            $scope.$apply();
+          });
+        }
+      });
+    };
+
+    this.send = function(addr) {
+      return false;
     };
 
     this.sendAddrs = function() {
