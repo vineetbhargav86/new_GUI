@@ -43,6 +43,12 @@ angular.module('iguanaApp.controllers').controller('logInController',
   //     $log.debug('Profile exists');
   //   }
   // });
+
+  $scope.remember = false;
+
+  $scope.show = function() {
+    $log.debug("remember: ", $scope.remember);
+  };
   
   this.signup = function(){
     $rootScope.go('signup');
@@ -88,25 +94,29 @@ angular.module('iguanaApp.controllers').controller('logInController',
             if (err) {
               $log.debug('getProfile error:', err);
               return;
-            } else if (profile) {
-              $log.debug("profile; ", profile);
-            } else {
+            } else if (!profile) {
               profile = Profile.create();
               profile.credentials = {
-               "handle": $scope.username, 
-               "passphrase": $scope.passphrase,
                "btc_addr": [response.data.BTC],
                "contacts": []
               };
-              storageService.storeNewProfile(profile, function(err) {
-                if (err) {
-                  $log.debug('error store new profile : ', err);
-                  return;
-                } else {
-                  $log.debug('store new Profile: ', profile);
-                }
-              });
             }
+              
+            if ($scope.remember) {
+              profile.credentials.username = $scope.username;
+              profile.credentials.password = $scope.password;
+              profile.credentials.passphrase = $scope.passphrase;
+              $log.debug("remember: ", $scope.remember);
+            }
+            
+            storageService.storeNewProfile(profile, function(err) {
+              if (err) {
+                $log.debug('error store new profile : ', err);
+                return;
+              } else {
+                $log.debug('store new Profile: ', profile);
+              }
+            });
           });
 
           // storageService.getProfile(function(err, profile) {

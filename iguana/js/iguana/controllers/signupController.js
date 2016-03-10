@@ -41,8 +41,6 @@ angular.module('iguanaApp.controllers').controller('signupController',
           var profile = Profile.create();
 
           profile.credentials = {
-           "handle": $scope.username, 
-           "passphrase": $scope.passphrase,
            "btc_addr": [response.data.BTC],
            "contacts": []
           }; 
