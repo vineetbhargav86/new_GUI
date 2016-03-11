@@ -14,7 +14,14 @@ angular.module('iguanaApp.controllers').controller('preferencesInformationContro
           return;
         } else {
           $scope.walletName = profile.credentials.handle;
-          $scope.walletId = profile.credentials.btcd;
+          switch ($rootScope.app_config.wallet.settings.unitCode) {
+            case "btc":
+              $scope.walletId = profile.credentials.btc;
+              break;
+            default:
+              $scope.walletId = profile.credentials.btcd;
+              break;
+          }
           // $scope.network = c.network;
           // $scope.addressType = c.addressType || 'P2SH';
           // $scope.derivationStrategy = c.derivationStrategy || 'BIP45';

@@ -104,6 +104,16 @@
     
     <div ng-show="addrs">
       <h4 class="title m0" translate>Last Wallet Addresses</h4>
+      <ul class="no-bullet m0">
+        <li ng-repeat="a in addrs" class="oh">
+          <div class="enable_text_select ellipsis">
+            {{a}} 
+          </div>
+          <div class="text-gray size-12 right enable_text_select">
+            {{a.path}} &middot;  {{a.createdOn *1000  | amDateFormat:'MMMM Do YYYY, h:mm a' }}
+          </div>
+        </li>
+      </ul>
       <div class="text-centered space text-gray size-12" translate>
         Only Main (not change) addresses are shown.<br/> 
         <h4 class="title m0" translate>Balance By Addresses</h4>
@@ -112,7 +122,7 @@
         <li class="oh ng-scope" ng-repeat="a in addrs">
           <div class="small-8 columns enable_text_select text-black ellipsis ng-binding">
             {{a}}<br/>
-            <span class="text-gray text-right">0 BTC</span>
+            <span class="text-gray text-right" style="float:right;">0 BTC</span>
           </div>
           <div class="text-gray size-12 right enable_text_select">
             <span class="new-btn">
@@ -133,7 +143,7 @@
       </ul> -->
     </div>
 
-    <ul class="no-bullet m0 size-14" ng-show="index.balanceByAddress">
+<!--     <ul class="no-bullet m0 size-14" ng-show="index.balanceByAddress">
       <div ng-if="index.balanceByAddress[0]">
         <h4 class="title m0" translate>Balance By Address</h4>
         <li class="line-b p20 oh"  ng-repeat="a in index.balanceByAddress">
@@ -145,7 +155,7 @@
           </div>
         </li>
       </div>
-    </ul>
+    </ul> -->
 
 
     <h4></h4>

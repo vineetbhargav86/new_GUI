@@ -2895,7 +2895,7 @@ touch-action: manipulation; /* IE11+ */
 .preferences.advanced .space h4 span{ padding:0 0;}
 .preferences.advanced span.new-btn{ float:right;}
 .preferences.advanced span.new-btn a{ background: #3d8af7; border: 1px solid #333; border-radius: 10px; color: #fff; padding: 5px 20px; float:right; margin-top:8px;}
-.enable_text_select span{ margin-left:210px;}
+/*.enable_text_select span{ margin-left:210px;}*/
 
 .preferences.advanced form.border{ border:1px solid #333;}
 .preferences.advanced form.advanced{ float:none; display:inline-block; width:100%;}
@@ -3093,6 +3093,14 @@ touch-action: manipulation; /* IE11+ */
 
 .form-group{
   position:relative;
+}
+
+.remember-input {
+  margin: 2px 0 1.5em 0 !important;
+}
+
+.remember-label {
+  margin-left: 20px !important;
 }
 
 .btn-white{
