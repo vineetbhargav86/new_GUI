@@ -83,6 +83,15 @@
       </div>
     </div>
 
+    <div class="row collapse">
+      <label for="address" class="left" >
+        <span translate>Search contacts by BTC address</span>
+      </label>
+    </div>
+    <div class="input">
+      <input type="text" ng-model="searchContact.addr" />
+    </div>
+
     <div ng-show="!selectedWalletsOpt" class="m20b">
       <ul ng-show="!addAddressbookEntry" class="no-bullet m0" ng-init="getList()">
 <!--         <li class="p10 line-b" ng-repeat="(addr, label) in list">
@@ -102,7 +111,7 @@
             </div>
           </div> 
         </li> -->
-        <li class="p10" ng-repeat="addr in list track by $index">
+        <li class="p10" ng-repeat="addr in list | filter: searchContact.addr">
           <h3>{{addr.label}}<br/><span class="size-12 tu" translate>{{addr.address}}</span></h3>
           <ul class="controls">
             <li>
@@ -113,7 +122,7 @@
             </li>
             <li>
               <span class="size-12 tu" translate>Remove</span><br/>
-               <a ng-click="remove($index)">
+               <a ng-click="remove(addr)">
                  <i class="fi-minus size-24 m20r lh icon"></i>
                </a>
             </li>

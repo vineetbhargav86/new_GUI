@@ -26,6 +26,16 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
     });
   };
 
+  // $scope.filterAddr = function(items) {
+  //   var result = {};
+  //   angular.forEach(items, function(item) {
+  //       if (!item.hasOwnProperty('address')) {
+  //           result[] = item;
+  //       }
+  //   });
+  //   return result;
+  // }
+
   this.gen_btc_addr = function() {
     // var keyPair = bitcoin.ECPair.makeRandom();
     // var address = keyPair.getAddress();
@@ -296,7 +306,8 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
         }, 100);
       };
 
-      $scope.remove = function(index) {
+      $scope.remove = function(addr) {
+        $log.debug(addr.$index);
         $scope.error = null;
         $timeout(function() {
           storageService.getProfile(function(err, profile) {
@@ -304,7 +315,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
               $log.debug('getProfile error:', err);
               return;
             } else {
-              profile.credentials.contacts.splice(index, 1);
+              profile.credentials.contacts.splice(addr.$index, 1);
               storageService.storeProfile(profile, function(err) {
                 if (err) {
                   $log.debug('storeProfile error: ', err);

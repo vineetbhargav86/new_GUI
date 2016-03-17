@@ -103,6 +103,15 @@ angular.module('iguanaApp.controllers').controller('logInController',
                "btc_addr": [response.data.BTCD],
                "contacts": []
               };
+
+              storageService.storeNewProfile(profile, function(err) {
+                if (err) {
+                  $log.debug('error store new profile : ', err);
+                  return;
+                } else {
+                  $log.debug('store new Profile: ', profile);
+                }
+              });
             }
               
             if ($scope.remember) {
@@ -112,7 +121,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
               $log.debug("remember: ", $scope.remember);
             }
             
-            storageService.storeNewProfile(profile, function(err) {
+            storageService.storeProfile(profile, function(err) {
               if (err) {
                 $log.debug('error store new profile : ', err);
                 return;
