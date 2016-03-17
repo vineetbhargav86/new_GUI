@@ -5,6 +5,8 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
   function($scope, $rootScope, $timeout, $filter, $modal, $log,  isCordova, isMobile, animationService, lodash, storageService, isChromeApp, gettext, nodeWebkit, go) {
   
   this.btc_addr = "";
+
+  this.unitName = $rootScope.app_config.wallet.settings.unitName;
   
   // get btc address and generate QR code for the last btc address
   this.get_btc = function() {
