@@ -1919,9 +1919,12 @@ input {
 }
 
 body {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   -ms-content-zooming: none;
 }
+
+::-webkit-scrollbar { width: 0px; }
 
 /* Fix IE 10 */
 .extra-margin-bottom {
