@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('preferencesInformationController',
-  function($rootScope, $scope, $log, $timeout, isMobile, gettextCatalog, lodash, storageService, go) {
+  function($rootScope, $scope, $state, $log, $timeout, isMobile, gettextCatalog, lodash, storageService, go) {
     var base = 'xpub';
 
     this.init = function() {
@@ -56,7 +56,11 @@ angular.module('iguanaApp.controllers').controller('preferencesInformationContro
     };
 
     this.send = function(addr) {
-      return false;
+      $log.debug("go to send tab, addr: ", addr);
+      $state.go('walletHome', {
+        'address': addr,
+        'action': 'openSendTab'
+      });
     };
 
     this.sendAddrs = function() {
