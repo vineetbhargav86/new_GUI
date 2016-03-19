@@ -45,7 +45,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
   // });
 
   $scope.remember = false;
-
+  $scope.errorOn = false;    
   $scope.show = function() {
     $log.debug("remember: ", $scope.remember);
   };
@@ -81,6 +81,8 @@ angular.module('iguanaApp.controllers').controller('logInController',
 
     if ($scope.username == undefined || $scope.password == undefined || $scope.passphrase == undefined) {
       $scope.response = 'Please input all required data';
+      $scope.errorText = "Please input all required data.";
+      $scope.errorOn = true;    
     } else {
       naclAPI.makeRequest(nacl_request_login, function(request, response) {
         if (response.data.result == "success") {
@@ -93,6 +95,8 @@ angular.module('iguanaApp.controllers').controller('logInController',
           storageService.getProfile(function(err, profile) {
             if (err) {
               $log.debug('getProfile error:', err);
+              $scope.errorText = "The data you entered did not match our records. Please try again."; 
+              $scope.errorOn = true;        
               return;
             } else if (!profile) {
               profile = Profile.create();
@@ -107,6 +111,8 @@ angular.module('iguanaApp.controllers').controller('logInController',
               storageService.storeNewProfile(profile, function(err) {
                 if (err) {
                   $log.debug('error store new profile : ', err);
+                  $scope.errorText = "Can't store new profile. Please try later.";   
+                  $scope.errorOn = true; 
                   return;
                 } else {
                   $log.debug('store new Profile: ', profile);
@@ -124,6 +130,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
             storageService.storeProfile(profile, function(err) {
               if (err) {
                 $log.debug('error store new profile : ', err);
+                $scope.errorText = "Can't store new profile. Please try later.";  
                 return;
               } else {
                 $log.debug('store new Profile: ', profile);
@@ -151,7 +158,8 @@ angular.module('iguanaApp.controllers').controller('logInController',
           //     });
           //   }
 
-            $timeout(function(){
+            $timeout(function(){    
+              $rootScope.$emit('entered passphrase', $scope.passphrase);    
               go.walletHome();
             }, 50);
           // });

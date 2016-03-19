@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('indexController', 
-  function($rootScope, $scope, $http, $log, $filter, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile) {
+  function($rootScope, $scope, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile, animationService) {
   
   var self = this;
   var SOFT_CONFIRMATION_LIMIT = 12;
@@ -1243,6 +1243,19 @@ angular.module('iguanaApp.controllers').controller('indexController',
       self.addressbook = ab;
     });*/
   };
+    
+  $scope.enterPassphrase = function(){
+    $modal.open({
+      templateUrl: 'views/modals/passphrase.html',
+      windowClass: animationService.modalAnimated.slideUp,
+      controller: 'ModalInstanceCtrl',
+      resolve: {
+        passphrase: function(){
+            return self.passphrase;
+        }
+      }    
+    });
+  };    
 
   $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
     self.prevState = from.name || 'walletHome';
@@ -1546,6 +1559,10 @@ angular.module('iguanaApp.controllers').controller('indexController',
       $rootScope.$apply();
     });
   });
+    
+    $rootScope.$on('entered passphrase', function(event, data){
+        self.passphrase = data;
+    });
 
  
 });

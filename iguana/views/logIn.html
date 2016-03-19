@@ -29,11 +29,14 @@
               <input type="password" name="passphrase" id="passphrase" class="form-control login-form-input" ng-model="passphrase" required />
               <label for="passphrase" class="login-form-label">Passphrase</label>
           </div>
-          <div class="form-group">
-              
+          <div class="form-group remember-group">
+            <label for="remember" class="login-form-label remember-label">Remember me</label>
               <input type="checkbox" name="remember" id="remember" class="form-control remember-input" ng-model="remember" ng-click="show()" />
-              <label for="remember" class="login-form-label remember-label">Remember me</label>
           </div>
+          <div class="alert-box info" ng-show="errorOn">
+              {{errorText}}
+              <a href="#" ng-click="errorOn=false;" class="close">&times;</a>
+          </div>   
           <div class="form-actions" style="margin-left:35px;">
                 <button type="button" class="btn btn-white" ng-click="logIn.signup()">New account</button>
           </div>

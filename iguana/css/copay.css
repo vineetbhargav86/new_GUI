@@ -3062,7 +3062,6 @@ touch-action: manipulation; /* IE11+ */
     border-bottom: 1px solid #9e9e9e;
     color:black;
     height: 2.2rem;
-    width: 100%;
     font-size: 1rem;
 }
 
@@ -3388,4 +3387,50 @@ label.signup-passphrase-label {
 
 .signup-passphrase-body .generate{
   font-size:.7rem;
+}
+
+.form-group.remember-group{
+    left: -20px;
+}
+
+.passphrase-modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.3); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.passphrase-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    padding-bottom: 53px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    position: relative;
+}
+
+.passphrase-form-body label, .passphrase-form-body input {
+    font-size: 1rem;
+}
+
+.passphrase-form-submit{
+    float: right;
+}
+
+.passphrase-form-submit button{
+    padding: 0.7rem 1rem .7rem;
+}
+
+.passphrase-close{
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    font-size: 2rem;
 }
