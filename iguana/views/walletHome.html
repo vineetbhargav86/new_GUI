@@ -4,7 +4,7 @@
   ng-init="titleSection=' '; showPreferences = true; index.isAtHome=true;index.showPeerFavorites=false;">
 </div>
 <div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>
-<div ng-controller="walletHomeController as home">
+<div ng-controller="walletHomeController as home" ng-init="index.init()">
   <div class="row columns m20tp" ng-show="index.noFocusedWallet">
     <div class="text-center text-warning m20b">
       <i class="fi-alert"></i> <span translate>You do not have a wallet</span>
@@ -350,12 +350,12 @@
               ng-style="{'background-color':app_config.colorFor}">
             </div> 
           </div>
-      <div ng-show="index.needsBackup" ng-init="home.get_btc()" class="p60t columns text-center">
+      <div ng-show="index.needsBackup" ng-init="index.get_btc()" class="p60t columns text-center">
         <h1 translate>My Bitcoin address</h1>
         <div class="square-icon">
           <div id="qrcode" style="text-align: center;"></div>
         </div>
-        <h5 translate>{{ home.btc_addr }}</h5>
+        <h5>{{ index.btc_addr }}</h5>
         <h6><a ng-click="home.gen_btc_addr()" translate>Generate new address</a></h6>
         <p class="text-gray m20b columns" translate>
           Share this wallet address to receive payments. To protect your privacy, new addresses are generated automatically once you use them.
@@ -486,7 +486,7 @@
       </div>
       <div class="row m20t">
         <div class="large-12 large-centered columns">
-          <h3>From: {{ home.btc_addr }} <span clss="close"><a ng-click="home.goHome()"><img src="img/close.png"></a></span></h3> 
+          <h3>From: <a ng-click="home.goWallet()">{{ index.btc_addr }}</a> <span clss="close"><a ng-click="home.goHome()"><img src="img/close.png"></a></span></h3> 
           <form name="sendForm" ng-submit="home.submitForm()" ng-disabled="home.blockUx || home.onGoingProcess" novalidate> 
 
             <div ng-hide="home._paypro || home.hideAddress">

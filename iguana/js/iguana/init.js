@@ -144,6 +144,10 @@ angular
       })
       .state('walletHome', {
         url: '/walletHome',
+        params: {
+          action: null,
+          address: null,
+        },
         walletShouldBeComplete: true,
         needProfile: true,
         views: {

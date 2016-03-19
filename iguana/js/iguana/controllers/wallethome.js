@@ -2,30 +2,14 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('walletHomeController', 
-  function($scope, $rootScope, $timeout, $filter, $modal, $log,  isCordova, isMobile, animationService, lodash, storageService, isChromeApp, gettext, nodeWebkit, go) {
+  function($scope, $rootScope, $stateParams, $timeout, $filter, $modal, $log,  isCordova, isMobile, animationService, lodash, storageService, isChromeApp, gettext, nodeWebkit, go) {
   
   this.btc_addr = "";
 
   this.unitName = $rootScope.app_config.wallet.settings.unitName;
-  
-  // get btc address and generate QR code for the last btc address
-  this.get_btc = function() {
-    var self = this;
-    
-    storageService.getProfile(function(err, profile) {
-      if (err) {
-        $log.debug('getProfile error:', err);
-        return;
-      } else if (profile) {
-        self.btc_addr = profile.credentials.btc_addr.pop();
-        $("#qrcode").qrcode({
-          render: 'image',
-          size: 201,
-          text: self.btc_addr
-        });
-        $log.debug("qrcode init: ", self.btc_addr);
-      }
-    });
+
+  this.goWallet = function() {
+    go.information();
   };
 
   // $scope.filterAddr = function(items) {
@@ -191,6 +175,8 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
     // var fc = profileService.focusedClient;
     self.lockAddress = false;
     self._address = null;
+
+    self.btc_addr = address;
 
     var ModalInstanceCtrl = function($scope, $modalInstance) {
       $scope.wallets = wallets;

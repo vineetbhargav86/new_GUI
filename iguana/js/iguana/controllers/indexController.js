@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('indexController', 
-  function($rootScope, $scope, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile, animationService) {
-  
+  function($rootScope, $scope, $stateParams, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile, animationService) {
+
   var self = this;
   var SOFT_CONFIRMATION_LIMIT = 12;
   self.isCordova = isCordova;
@@ -83,6 +83,41 @@ angular.module('iguanaApp.controllers').controller('indexController',
 
   self.goHome = function() {
     go.walletHome();
+  };
+
+  // get btc address and generate QR code for the last btc address
+  this.get_btc = function() {
+    var self = this;
+    
+    storageService.getProfile(function(err, profile) {
+      if (err) {
+        $log.debug('getProfile error:', err);
+        return;
+      } else if (profile) {
+        self.btc_addr = profile.credentials.btc_addr.pop();
+        $("#qrcode").qrcode({
+          render: 'image',
+          size: 201,
+          text: self.btc_addr
+        });
+        $log.debug("qrcode init: ", self.btc_addr);
+      }
+    });
+  };
+
+  this.init = function() {
+    var self = this;
+
+    if ($stateParams.action == "openSendTab") {
+      $log.debug('address is: ', $stateParams.address);
+      self.btc_addr = $stateParams.address;
+      var send_tab = {
+        'title': gettext('Send'),
+        'icon': {false:'icon-send', true: 'icon-send-active'},
+        'link': 'send'
+      };
+      self.setTab(send_tab, false, 0, true);
+    }
   };
 
   self.menu = [{
