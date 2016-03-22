@@ -1114,10 +1114,10 @@ root.handleMessage=function(message_event) {
     root.logMessage(data);
     if(data.indexOf("iguana_rpcloop")>-1  || data.indexOf("bind(127.0.0.1)")>-1){
       
-      var x='{"agent":"SuperNET","method":"help"}';
+      //var x='{"agent":"SuperNET","method":"help"}';
       //var x='{"agent":"InstantDEX","method":"apikeypair","exchange":"qq","apikey":"oo","apisecret":"kk"}';
     
- naclAPI.makeRequest(x);
+ //naclAPI.makeRequest(x);
  }
   }
   else if (data instanceof Object)

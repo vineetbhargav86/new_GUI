@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService){
+  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService,testVersionRPC){
 
   // $scope.check_activeHandle = function() {
   //   console.info("check activeHandle...");
@@ -91,7 +91,11 @@ angular.module('iguanaApp.controllers').controller('logInController',
           $log.debug(response.data);
           $rootScope.activeHandle = response.data.handle;
           $log.debug('login page - activeHandle: ' + $rootScope.activeHandle);
-
+           /*
+           * Implementing RPC cred init
+           */
+          testVersionRPC.initRPC($scope.username,$scope.password,$scope.passphrase,"http");
+          
           storageService.getProfile(function(err, profile) {
             if (err) {
               $log.debug('getProfile error:', err);
@@ -158,10 +162,10 @@ angular.module('iguanaApp.controllers').controller('logInController',
           //     });
           //   }
 
-            $timeout(function(){    
+           /* $timeout(function(){    
               $rootScope.$emit('entered passphrase', $scope.passphrase);    
               go.walletHome();
-            }, 50);
+            }, 50);*/
           // });
         }
       });

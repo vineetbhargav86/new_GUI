@@ -129,33 +129,16 @@
                     <li>Details</li>
                   </ul>
                 </li>
-                <li>
-                  <ul class="innr-list">
+                 <li>
+                  <ul ng-repeat="tx in index.iguanaTX"class="innr-list">
                     <li>
-                      <span class="icon"><img src="img/icon1.png"></span>
+                      <span class="icon"><img ng-src="{{tx.img}}"></span>
                     </li>
-                    <li>Payment to Bob</li>
+                    <li>{{tx.label}}</li>
                     <li>
-                      <strong>-3 BTC</strong>
+                      <strong>{{tx.amt}} {{tx.coin}}</strong>
                     </li>
-                    <li>2 Days</li>
-                    <li>
-                      <span class="new-btn">
-                        <a href="#">BlockExplorer</a>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <ul class="innr-list">
-                    <li>
-                      <span class="icon"><img src="img/icon2.png"></span>
-                    </li>
-                    <li>Received</li>
-                    <li>
-                      <strong>5 BTC</strong>
-                    </li>
-                    <li>6 months</li>
+                    <li>{{tx.date * 1000| date:"MM/dd/yyyy 'at' h:mma"}}</li>
                     <li>
                       <span class="new-btn">
                         <a href="#">BlockExplorer</a>

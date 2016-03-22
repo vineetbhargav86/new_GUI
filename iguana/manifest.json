@@ -25,7 +25,10 @@
       "system.network",
       "system.cpu",
       "notifications",
-    "videoCapture"]
+    "videoCapture",
+    "http://127.0.0.1:14632/",
+    "http://127.0.0.1:8332/"
+    ]
 ,
   "app": {
     "background": {

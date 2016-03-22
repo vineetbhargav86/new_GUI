@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('indexController', 
-  function($rootScope, $scope, $stateParams, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile, animationService) {
+  function(rpcService,testVersionRPC,$rootScope, $scope, $stateParams, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile, animationService) {
 
   var self = this;
   var SOFT_CONFIRMATION_LIMIT = 12;
@@ -12,6 +12,107 @@ angular.module('iguanaApp.controllers').controller('indexController',
   self.historyShowLimit = 10;
   self.updatingTxHistory = {};
   self.prevState = 'walletHome';
+  self.iguanaTX=[];
+  
+  var acc={
+      root:testVersionRPC,
+      
+        updateBalance:function(){
+            
+            if(acc.root.listreceived.output.length>0){
+      rpcService.getBalance().then(
+               function(response){
+                   acc.root.transactions.output=response.data.result;
+               return acc.calculatecalance();    
+              }
+               );  
+        
+    }else{
+        
+        rpcService.getListAccounts().then(function(){
+            
+           rpcService.getBalance().then(
+               function(response){
+                   acc.root.transactions.output=response.data.result;
+               return acc.calculatecalance();    
+              }
+               );   
+        });
+        
+    }
+        },
+        calculatecalance:function(){
+            
+            console.log("Calculating balance");
+          
+          var total=0,max=0,temp,tx=[],t={};
+          
+          for(var x in acc.root.listreceived.output){
+              temp=acc.root.listreceived.output[x];
+              //console.log(temp);
+          acc.root.totalBalance.by_addr[temp.address]=0;
+           if(temp.account!==""){
+               acc.root.totalBalance.by_name[temp.account]=0;
+           }
+           }
+          
+          //root.totalBalance.total=total;
+          
+          for(var x in acc.root.transactions.output){
+              temp=acc.root.transactions.output[x];
+              if(temp.category==="receive"){
+                  t.img="img/icon2.png";
+                   t.label="Received";
+                  t.category="receive";
+                acc.root.totalBalance.by_addr[temp.address]=acc.root.totalBalance.by_addr[temp.address]+temp.amount; 
+                if(temp.account!==""){
+               acc.root.totalBalance.by_name[temp.account]=acc.root.totalBalance.by_name[temp.account]+temp.amount;
+           }
+           total=total+temp.amount;
+              }else if(temp.category==="send"){
+                  t.img="img/icon1.png";
+                  t.label="Sent to xxx";
+                  t.category="send";
+                 acc.root.totalBalance.by_addr[temp.address]=acc.root.totalBalance.by_addr[temp.address]-temp.amount; 
+                if(temp.account!==""){
+               acc.root.totalBalance.by_name[temp.account]=acc.root.totalBalance.by_name[temp.account]-temp.amount;
+           }
+           total=total-temp.amount;
+              }
+              t.amt=temp.amount;
+                  t.date=temp.timereceived;
+              t.txid=temp.txid;
+              t.block=temp.blockhash;
+              t.coin=acc.root.activeCOIN;
+           acc.root.totalBalance.total=total;
+           
+           //console.log(t);
+           tx.push(t);
+           }
+          self.iguanaTX=tx;
+       console.log(tx);
+          return tx;
+          
+          
+            
+        }
+      
+  };
+  
+self.updateBalanceIguana=function(){
+    console.log("updatebalance iguana called");
+    if(testVersionRPC.isLoggedin && testVersionRPC.rpcOK){
+               var tx=acc.updateBalance();
+               $timeout(self.updateBalanceIguana, testVersionRPC.settings.balanceTimer*60*1000);
+       }else{
+           $timeout(self.updateBalanceIguana, 1000);
+       }
+    
+
+    
+};
+
+self.updateBalanceIguana();
   
   naclCommon.onload();
   
