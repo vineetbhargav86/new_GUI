@@ -302,7 +302,7 @@ angular.module('iguanaApp.services')
     },
     
     getListAccounts:function(){
-        var request='{"id":"iguana_test", "method": "listtransactions", "params": ["*", 20, 100] }';
+        var request='{"id":"iguana_test", "method": "listreceivedbyaddress", "params": [6 , true] }';
          return self.callAPI(request); 
         }
       };

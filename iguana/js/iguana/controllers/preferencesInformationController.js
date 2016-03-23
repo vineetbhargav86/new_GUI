@@ -1,27 +1,39 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('preferencesInformationController',
-  function($rootScope, $scope, $state, $log, $timeout, isMobile, gettextCatalog, lodash, storageService, go) {
+  function($rootScope, $scope, $state, $log, $timeout, isMobile, gettextCatalog, lodash, storageService, go,profileService) {
     var base = 'xpub';
 
     this.init = function() {
 
-      $scope.walletConfig = $rootScope.app_config.wallet.settings.wconfig;
-
-      storageService.getProfile(function(err, profile) {
+     $scope.walletConfig = $rootScope.app_config.wallet.settings.wconfig;
+         // $scope.walletName = profileService.credentials.handle;
+         // $scope.walletId=$rootScope.app_config.wallet.settings.walletId;
+         // $scope.addrs=profileService.balance.by_addr;
+         // $scope.coin=$rootScope.app_config.wallet.settings.unitCode;
+       storageService.getProfile(function(err, profile) {
         if (err) {
           $log.debug('getProfile error:', err);
           return;
         } else {
           $scope.walletName = profile.credentials.handle;
-          switch ($rootScope.app_config.wallet.settings.unitCode) {
+          $scope.walletId=$rootScope.app_config.wallet.settings.walletId;
+          //$scope.addrs=profile.balance.by_addr;
+           $scope.coin=$rootScope.app_config.wallet.settings.unitCode;
+           var add=[];
+           for(var x in profile.balance.by_addr){
+               var pair={address:x,balance:profile.balance.by_addr[x]};
+               add.push(pair);
+           }
+           $scope.addrs=add;
+          /*switch ($rootScope.app_config.wallet.settings.unitCode) {
             case "btc":
               $scope.walletId = profile.credentials.btc;
               break;
             default:
               $scope.walletId = profile.credentials.btcd;
               break;
-          }
+          }*/
           // $scope.network = c.network;
           // $scope.addressType = c.addressType || 'P2SH';
           // $scope.derivationStrategy = c.derivationStrategy || 'BIP45';
@@ -29,10 +41,10 @@ angular.module('iguanaApp.controllers').controller('preferencesInformationContro
           // $scope.M = c.m;
           // $scope.N = c.n;
           // $scope.pubKeys = lodash.pluck(c.publicKeyRing, 'xPubKey');
-          $scope.addrs = null;
-        }
+          //$scope.addrs = null;
+      }
       });
-
+/*
       storageService.getProfile(function(err, profile){
         if (err) {
           $log.debug('getProfile error:', err);
@@ -52,7 +64,7 @@ angular.module('iguanaApp.controllers').controller('preferencesInformationContro
             $scope.$apply();
           });
         }
-      });
+      });*/
     };
 
     this.send = function(addr) {

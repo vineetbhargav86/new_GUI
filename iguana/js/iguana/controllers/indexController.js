@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('indexController', 
-  function(rpcService,testVersionRPC,$rootScope, $scope, $stateParams, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile, animationService) {
+  function(rpcService,testVersionRPC,$rootScope, $scope, $stateParams, $http, $log, $filter, $modal, $timeout, naclAPI, naclCommon, addonManager, isChromeApp, lodash, uxLanguage, go, isCordova, storageService, $state, isMobile,profileService, animationService) {
 
   var self = this;
   var SOFT_CONFIRMATION_LIMIT = 12;
@@ -13,28 +13,29 @@ angular.module('iguanaApp.controllers').controller('indexController',
   self.updatingTxHistory = {};
   self.prevState = 'walletHome';
   self.iguanaTX=[];
-  
-  var acc={
+  self.walletId="";
+ self.acc={
       root:testVersionRPC,
       
         updateBalance:function(){
             
-            if(acc.root.listreceived.output.length>0){
+            if( self.acc.root.listreceived.output.length>0){
       rpcService.getBalance().then(
                function(response){
-                   acc.root.transactions.output=response.data.result;
-               return acc.calculatecalance();    
+                    self.acc.root.transactions.output=response.data.result;
+               return  self.acc.calculatecalance();    
               }
                );  
         
     }else{
         
-        rpcService.getListAccounts().then(function(){
+        rpcService.getListAccounts().then(function(data){
+            self.acc.root.listreceived.output=data.data.result;
             
            rpcService.getBalance().then(
                function(response){
-                   acc.root.transactions.output=response.data.result;
-               return acc.calculatecalance();    
+                    self.acc.root.transactions.output=response.data.result;
+               return  self.acc.calculatecalance();    
               }
                );   
         });
@@ -45,37 +46,39 @@ angular.module('iguanaApp.controllers').controller('indexController',
             
             console.log("Calculating balance");
           
-          var total=0,max=0,temp,tx=[],t={};
+          var total=0,max=0,temp,tx=[],t={},addresses=[];
           
-          for(var x in acc.root.listreceived.output){
-              temp=acc.root.listreceived.output[x];
+          for(var x in  self.acc.root.listreceived.output){
+              temp= self.acc.root.listreceived.output[x];
               //console.log(temp);
-          acc.root.totalBalance.by_addr[temp.address]=0;
+           self.acc.root.totalBalance.by_addr[temp.address]=0;
            if(temp.account!==""){
-               acc.root.totalBalance.by_name[temp.account]=0;
+                self.acc.root.totalBalance.by_name[temp.account]=0;
            }
+           addresses.push(temp.address);
+           console.log("pushed :"+temp.address);
            }
           
           //root.totalBalance.total=total;
           
-          for(var x in acc.root.transactions.output){
-              temp=acc.root.transactions.output[x];
+          for(var x in  self.acc.root.transactions.output){
+              temp= self.acc.root.transactions.output[x];
               if(temp.category==="receive"){
                   t.img="img/icon2.png";
                    t.label="Received";
                   t.category="receive";
-                acc.root.totalBalance.by_addr[temp.address]=acc.root.totalBalance.by_addr[temp.address]+temp.amount; 
+                 self.acc.root.totalBalance.by_addr[temp.address]= self.acc.root.totalBalance.by_addr[temp.address]+temp.amount; 
                 if(temp.account!==""){
-               acc.root.totalBalance.by_name[temp.account]=acc.root.totalBalance.by_name[temp.account]+temp.amount;
+                self.acc.root.totalBalance.by_name[temp.account]= self.acc.root.totalBalance.by_name[temp.account]+temp.amount;
            }
            total=total+temp.amount;
               }else if(temp.category==="send"){
                   t.img="img/icon1.png";
                   t.label="Sent to xxx";
                   t.category="send";
-                 acc.root.totalBalance.by_addr[temp.address]=acc.root.totalBalance.by_addr[temp.address]-temp.amount; 
+                  self.acc.root.totalBalance.by_addr[temp.address]= self.acc.root.totalBalance.by_addr[temp.address]-temp.amount; 
                 if(temp.account!==""){
-               acc.root.totalBalance.by_name[temp.account]=acc.root.totalBalance.by_name[temp.account]-temp.amount;
+                self.acc.root.totalBalance.by_name[temp.account]= self.acc.root.totalBalance.by_name[temp.account]-temp.amount;
            }
            total=total-temp.amount;
               }
@@ -83,14 +86,28 @@ angular.module('iguanaApp.controllers').controller('indexController',
                   t.date=temp.timereceived;
               t.txid=temp.txid;
               t.block=temp.blockhash;
-              t.coin=acc.root.activeCOIN;
-           acc.root.totalBalance.total=total;
+              t.coin= self.acc.root.activeCOIN;
+            self.acc.root.totalBalance.total=total;
            
            //console.log(t);
            tx.push(t);
            }
           self.iguanaTX=tx;
        console.log(tx);
+       
+     var profile=profileService.Profile;
+        self.acc.root.totalBalance.addresses=addresses;
+       
+     profile.balance=self.acc.root.totalBalance;
+     profile.credentials.handle= self.acc.root.user;
+     console.log(self.acc.root.user);
+     profileService.fromObj(profile);
+     storageService.storeProfile();
+     
+      if($rootScope.app_config.wallet.settings.walletId==""){
+       self.get_btc();          
+      }
+
           return tx;
           
           
@@ -102,7 +119,7 @@ angular.module('iguanaApp.controllers').controller('indexController',
 self.updateBalanceIguana=function(){
     console.log("updatebalance iguana called");
     if(testVersionRPC.isLoggedin && testVersionRPC.rpcOK){
-               var tx=acc.updateBalance();
+               var tx=self.acc.updateBalance();
                $timeout(self.updateBalanceIguana, testVersionRPC.settings.balanceTimer*60*1000);
        }else{
            $timeout(self.updateBalanceIguana, 1000);
@@ -151,7 +168,8 @@ self.updateBalanceIguana();
         defaultLanguage: 'en',
         defaultLanguageName: 'English',
         feeLevel: 'normal',
-        wconfig: '1-1'
+        wconfig: '1-1',
+        walletId:"",
       }
     },
 
@@ -187,23 +205,44 @@ self.updateBalanceIguana();
   };
 
   // get btc address and generate QR code for the last btc address
-  this.get_btc = function() {
-    var self = this;
+  self.get_btc = function() {
+    var inner = this;
+    var addr=self.acc.root.totalBalance.addresses, max=0,temp="";
+    console.log(addr);
     
+    for(var x in addr){
+        if(max<self.acc.root.totalBalance.by_addr[addr[x]]){
+            temp=addr[x];
+            max=self.acc.root.totalBalance.by_addr[addr[x]];
+        }else if(max==0){
+            temp=addr[x];
+        }
+    }
+           $rootScope.app_config.wallet.settings.walletId=temp;
+           self.walletId=temp;
+    inner.btc_addr=temp;
+    $("#qrcode").html("");
+     $("#qrcode").qrcode({
+          render: 'image',
+          size: 201,
+          text: inner.btc_addr
+        });
+        $log.debug("qrcode init: ", inner.btc_addr);
+      /*  
     storageService.getProfile(function(err, profile) {
       if (err) {
         $log.debug('getProfile error:', err);
         return;
       } else if (profile) {
-        self.btc_addr = profile.credentials.btc_addr.pop();
+        inner.btc_addr = profile.credentials.btc_addr.pop();
         $("#qrcode").qrcode({
           render: 'image',
           size: 201,
-          text: self.btc_addr
+          text: inner.btc_addr
         });
-        $log.debug("qrcode init: ", self.btc_addr);
+        $log.debug("qrcode init: ", inner.btc_addr);
       }
-    });
+    });*/
   };
 
   this.init = function() {

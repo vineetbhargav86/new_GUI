@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService,testVersionRPC){
+  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService,testVersionRPC, profileService){
 
   // $scope.check_activeHandle = function() {
   //   console.info("check activeHandle...");
@@ -96,23 +96,27 @@ angular.module('iguanaApp.controllers').controller('logInController',
            */
           testVersionRPC.initRPC($scope.username,$scope.password,$scope.passphrase,"http");
           
-          storageService.getProfile(function(err, profile) {
-            if (err) {
-              $log.debug('getProfile error:', err);
-              $scope.errorText = "The data you entered did not match our records. Please try again."; 
-              $scope.errorOn = true;        
-              return;
-            } else if (!profile) {
-              profile = Profile.create();
+          var profile = profileService.create();
               profile.credentials = {
                "handle": response.data.handle,
-               "btcd": response.data.BTCD,
-               "btc": response.data.BTC,
-               "btc_addr": [response.data.BTCD],
-               "contacts": []
+               //"btcd": response.data.BTCD,
+               //"btc": response.data.BTC,
+               "addresses": [response.data.BTCD],
+               "contacts": [],
+               "balances":[],
+               "pubkey":""
               };
 
-              storageService.storeNewProfile(profile, function(err) {
+              
+            if ($scope.remember) {
+              profile.credentials.username = $scope.username;
+              profile.credentials.password = $scope.password;
+              profile.credentials.passphrase = $scope.passphrase;
+              $log.debug("remember: ", $scope.remember);
+            }
+            
+            
+            storageService.storeProfile(profile, function(err) {
                 if (err) {
                   $log.debug('error store new profile : ', err);
                   $scope.errorText = "Can't store new profile. Please try later.";   
@@ -122,14 +126,17 @@ angular.module('iguanaApp.controllers').controller('logInController',
                   $log.debug('store new Profile: ', profile);
                 }
               });
-            }
+              console.log(profileService.toObj());
+          /*storageService.getProfile(function(err, profile) {
+            if (err) {
+              $log.debug('getProfile error:', err);
+              $scope.errorText = "The data you entered did not match our records. Please try again."; 
+              $scope.errorOn = true;        
+              return;
+            } else if (!profile) {
               
-            if ($scope.remember) {
-              profile.credentials.username = $scope.username;
-              profile.credentials.password = $scope.password;
-              profile.credentials.passphrase = $scope.passphrase;
-              $log.debug("remember: ", $scope.remember);
             }
+             
             
             storageService.storeProfile(profile, function(err) {
               if (err) {
@@ -140,7 +147,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
                 $log.debug('store new Profile: ', profile);
               }
             });
-          });
+          });*/
 
           // storageService.getProfile(function(err, profile) {
           //   if (err) {
@@ -170,7 +177,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
         }
       });
     }
-  }
+  };
 
   $scope.registrate = function() {
     $log.debug('go to signup');

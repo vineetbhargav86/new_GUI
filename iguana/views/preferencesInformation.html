@@ -107,7 +107,7 @@
       <ul class="no-bullet m0">
         <li ng-repeat="a in addrs" class="oh">
           <div class="enable_text_select ellipsis">
-            {{a}} 
+            {{a.address}} 
           </div>
           <div class="text-gray size-12 right enable_text_select">
             {{a.path}} &middot;  {{a.createdOn *1000  | amDateFormat:'MMMM Do YYYY, h:mm a' }}
@@ -121,12 +121,12 @@
         <ul class="no-bullet m0">
         <li class="oh ng-scope" ng-repeat="a in addrs">
           <div class="small-8 columns enable_text_select text-black ellipsis ng-binding">
-            {{a}}<br/>
-            <span class="text-gray text-right" style="float:right;">0 BTC</span>
+            {{a.address}}<br/>
+            <span class="text-gray text-right" style="float:right;">{{a.balance}} {{coin}}</span>
           </div>
           <div class="text-gray size-12 right enable_text_select">
             <span class="new-btn">
-              <a ng-click="info.send(a)">Send from this address</a>
+              <a ng-click="info.send(a.address)">Send from this address</a>
             </span>
           </div>
         </li>

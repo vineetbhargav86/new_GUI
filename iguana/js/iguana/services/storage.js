@@ -226,7 +226,7 @@ angular.module('iguanaApp.services').factory('localStorageService',
 'use strict';
 
 angular.module('iguanaApp.services').factory('storageService', 
-  function($rootScope, logHeader, fileStorageService, localStorageService, $log, lodash, isCordova) {
+  function($rootScope, logHeader, fileStorageService, localStorageService, $log, lodash, isCordova,profileService) {
 
   var root = {};
 
@@ -335,13 +335,13 @@ angular.module('iguanaApp.services').factory('storageService',
   };
 
   root.storeNewProfile = function(profile, cb) {
-    encryptOnMobile(profile.toObj(), function(err, x) {
+    encryptOnMobile(profileService.toObj(), function(err, x) {
       storage.create('profile', x, cb);
     });
   };
 
   root.storeProfile = function(profile, cb) {
-    encryptOnMobile(profile.toObj(), function(err, x) {
+    encryptOnMobile(profileService.toObj(), function(err, x) {
       storage.set('profile', x, cb);
     });
   };
@@ -355,7 +355,7 @@ angular.module('iguanaApp.services').factory('storageService',
         if (err) return cb(err);
         var p, err;
         try {
-          p = Profile.fromString(str);
+          p = profileService.fromString(str);
         } catch (e) {
           $log.debug('Could not read profile:', e);
           err = new Error('Could not read profile:' + p);
