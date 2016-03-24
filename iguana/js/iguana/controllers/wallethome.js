@@ -86,7 +86,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
   this.showScanner = false;
   this.addr = {};
   this.lockedCurrentFeePerKb = null;
-
+ //   self.btc_addr="";
   var disableScannerListener = $rootScope.$on('dataScanned', function(event, data) {
     self.setForm(data);
     $rootScope.$emit('Local/SetTab', 'send');
@@ -932,6 +932,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
   };
 
   this.submitForm = function() {
+      console.log("send called");
     var fc = profileService.focusedClient;
     var unitToSat = this.unitToSatoshi;
     //var currentSpendUnconfirmed = configWallet.spendUnconfirmed;
@@ -943,11 +944,19 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
     }
 
     var form = $scope.sendForm;
+    //console.log(form);
+    
+    var comment = form.comment.$modelValue;
+    var amount=form.amount.$modelValue;
+    var to=form.address.$modelValue;
+    ;
     if (form.$invalid) {
       this.error = gettext('Unable to send transaction proposal');
       return;
     }
-
+    console.log("from "+$rootScope.sendFrom_address+" address: "+to+" amount:"+amount+" comment:"+comment);
+    $rootScope.account.walletSendinit(to,amount,comment);
+/*
     if (fc.isPrivKeyEncrypted()) {
       profileService.unlockFC(function(err) {
         if (err) return self.setSendError(err);
@@ -956,8 +965,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
       return;
     };
 
-    var comment = form.comment.$modelValue;
-
+    
     // ToDo: use a credential's (or fc's) function for this
     if (comment && !fc.credentials.sharedEncryptingKey) {
       var msg = 'Could not add message to imported wallet without shared encrypting key';
@@ -1014,7 +1022,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
               self.resetForm();
               /*txStatus.notify(txp, function() {
                 return $scope.$emit('Local/TxProposalAction');
-              });*/
+              });
               return;
             }
 
@@ -1032,7 +1040,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
           });
         });
       });
-    }, 100);
+    }, 100);*/
   };
 
   this._setOngoingForSigning = function() {

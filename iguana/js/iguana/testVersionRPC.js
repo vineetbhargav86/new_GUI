@@ -288,7 +288,7 @@ angular.module('iguanaApp.services')
     
   }, function errorCallback(response) {
      $log.debug('POST request failed.');
-     return $q.reject(response);
+     return response;
   });
             return promise;
     },
@@ -304,7 +304,37 @@ angular.module('iguanaApp.services')
     getListAccounts:function(){
         var request='{"id":"iguana_test", "method": "listreceivedbyaddress", "params": [6 , true] }';
          return self.callAPI(request); 
+        },
+        checkPassphrase:function(passphrase){
+            
+            var request='{"id":"iguana_passphrase_test",  "method": "walletpassphrasechange", "params": ["'+passphrase+'", "'+passphrase+'"] }';
+            return self.callAPI(request); 
+          
+        },
+        validateAddress:function(addr){
+           var request='{"id":"iguana_validateaddr_test", "method": "validateaddress", "params": ["'+addr+'"]}';
+           return self.callAPI(request);
+            
+        },
+        walletPassphrase:function(pass,time){
+            var request='{"id":"iguana_passphrase_test",  "method": "walletpassphrase", "params": ["'+pass+'", '+time+'] }';
+            return self.callAPI(request);
+        },
+        walletLock:function(){
+            var request='{"id":"iguana_walletlock_test",  "method": "walletlock", "params": [] }';
+            return self.callAPI(request);
+        },
+        walletSendFrom:function(from,to,amt,minconf,comment,commentto){
+          var request='{"id":"iguana_walletSend_test", "method": "sendfrom", "params": ["'+from+'", "'+to+'", '+amt+', '+minconf+', "'+comment+'", "'+commentto+'"] }';  
+          return self.callAPI(request);
+        },
+        walletEncrypt:function(pass){
+            var request='{"jsonrpc": "1.0", "id":"curltest",  "method": "encryptwallet", "params": ["'+pass+'"] }';  
+          
+            return self.callAPI(request);
         }
+        
+        
       };
       return self;
       

@@ -14,28 +14,28 @@ angular.module('iguanaApp.controllers').controller('indexController',
   self.prevState = 'walletHome';
   self.iguanaTX=[];
   self.walletId="";
- self.acc={
+ $rootScope.account={
       root:testVersionRPC,
       
         updateBalance:function(){
             
-            if( self.acc.root.listreceived.output.length>0){
+            if( $rootScope.account.root.listreceived.output.length>0){
       rpcService.getBalance().then(
                function(response){
-                    self.acc.root.transactions.output=response.data.result;
-               return  self.acc.calculatecalance();    
+                    $rootScope.account.root.transactions.output=response.data.result;
+               return  $rootScope.account.calculatecalance();    
               }
                );  
         
     }else{
         
         rpcService.getListAccounts().then(function(data){
-            self.acc.root.listreceived.output=data.data.result;
+            $rootScope.account.root.listreceived.output=data.data.result;
             
            rpcService.getBalance().then(
                function(response){
-                    self.acc.root.transactions.output=response.data.result;
-               return  self.acc.calculatecalance();    
+                    $rootScope.account.root.transactions.output=response.data.result;
+               return  $rootScope.account.calculatecalance();    
               }
                );   
         });
@@ -48,12 +48,12 @@ angular.module('iguanaApp.controllers').controller('indexController',
           
           var total=0,max=0,temp,tx=[],t={},addresses=[];
           
-          for(var x in  self.acc.root.listreceived.output){
-              temp= self.acc.root.listreceived.output[x];
+          for(var x in  $rootScope.account.root.listreceived.output){
+              temp= $rootScope.account.root.listreceived.output[x];
               //console.log(temp);
-           self.acc.root.totalBalance.by_addr[temp.address]=0;
+           $rootScope.account.root.totalBalance.by_addr[temp.address]=0;
            if(temp.account!==""){
-                self.acc.root.totalBalance.by_name[temp.account]=0;
+                $rootScope.account.root.totalBalance.by_name[temp.account]=0;
            }
            addresses.push(temp.address);
            console.log("pushed :"+temp.address);
@@ -61,24 +61,24 @@ angular.module('iguanaApp.controllers').controller('indexController',
           
           //root.totalBalance.total=total;
           
-          for(var x in  self.acc.root.transactions.output){
-              temp= self.acc.root.transactions.output[x];
+          for(var x in  $rootScope.account.root.transactions.output){
+              temp= $rootScope.account.root.transactions.output[x];
               if(temp.category==="receive"){
                   t.img="img/icon2.png";
                    t.label="Received";
                   t.category="receive";
-                 self.acc.root.totalBalance.by_addr[temp.address]= self.acc.root.totalBalance.by_addr[temp.address]+temp.amount; 
+                 $rootScope.account.root.totalBalance.by_addr[temp.address]= $rootScope.account.root.totalBalance.by_addr[temp.address]+temp.amount; 
                 if(temp.account!==""){
-                self.acc.root.totalBalance.by_name[temp.account]= self.acc.root.totalBalance.by_name[temp.account]+temp.amount;
+                $rootScope.account.root.totalBalance.by_name[temp.account]= $rootScope.account.root.totalBalance.by_name[temp.account]+temp.amount;
            }
            total=total+temp.amount;
               }else if(temp.category==="send"){
                   t.img="img/icon1.png";
                   t.label="Sent to xxx";
                   t.category="send";
-                  self.acc.root.totalBalance.by_addr[temp.address]= self.acc.root.totalBalance.by_addr[temp.address]-temp.amount; 
+                  $rootScope.account.root.totalBalance.by_addr[temp.address]= $rootScope.account.root.totalBalance.by_addr[temp.address]-temp.amount; 
                 if(temp.account!==""){
-                self.acc.root.totalBalance.by_name[temp.account]= self.acc.root.totalBalance.by_name[temp.account]-temp.amount;
+                $rootScope.account.root.totalBalance.by_name[temp.account]= $rootScope.account.root.totalBalance.by_name[temp.account]-temp.amount;
            }
            total=total-temp.amount;
               }
@@ -86,8 +86,8 @@ angular.module('iguanaApp.controllers').controller('indexController',
                   t.date=temp.timereceived;
               t.txid=temp.txid;
               t.block=temp.blockhash;
-              t.coin= self.acc.root.activeCOIN;
-            self.acc.root.totalBalance.total=total;
+              t.coin= $rootScope.account.root.activeCOIN;
+            $rootScope.account.root.totalBalance.total=total;
            
            //console.log(t);
            tx.push(t);
@@ -96,11 +96,11 @@ angular.module('iguanaApp.controllers').controller('indexController',
        console.log(tx);
        
      var profile=profileService.Profile;
-        self.acc.root.totalBalance.addresses=addresses;
+        $rootScope.account.root.totalBalance.addresses=addresses;
        
-     profile.balance=self.acc.root.totalBalance;
-     profile.credentials.handle= self.acc.root.user;
-     console.log(self.acc.root.user);
+     profile.balance=$rootScope.account.root.totalBalance;
+     profile.credentials.handle= $rootScope.account.root.user;
+     console.log($rootScope.account.root.user);
      profileService.fromObj(profile);
      storageService.storeProfile();
      
@@ -112,6 +112,91 @@ angular.module('iguanaApp.controllers').controller('indexController',
           
           
             
+        },
+        walletSendinit:function(to,amt,comment){
+            
+            if(!$rootScope.account.root.passphraseOK){
+                rpcService.checkPassphrase($rootScope.account.root.passPhrase).then(
+                        function(response){
+                            // checking the response
+                            console.log(response);
+               /* if(response.data.error && response.data.error.code === -14){
+                 $rootScope.account.root.passphraseOK=false; 
+              }else if(response.data.error && response.data.error.code === -15){
+                   $rootScope.account.root.isEncrypted=false;
+                   
+              }else if(response.data.result === null && response.data.error === null){
+                  $rootScope.account.root.passphraseOK=true;
+                  $rootScope.account.root.isEncrypted=true;
+              }*/
+              
+              if(!$rootScope.account.root.isEncrypted && response.data.error && response.data.error.code === -15){
+                 rpcService.walletEncrypt($rootScope.account.root.passPhrase).then(
+                        function(response){
+                            /// to be tested 
+                            //console.log(response);
+                            //$rootScope.account.walletSend(to,amt,comment);  
+                        });
+                  
+              }else  if(response.data.error && response.data.error.code === -14){
+                 $rootScope.account.root.passphraseOK=false; 
+                 $rootScope.account.root.isEncrypted=false;
+                 console.log("asking for new passphrase");
+                 $rootScope.account.root.passPhrase=$scope.enterPassphrase();
+                 //$rootScope.account.passpraseWait($rootScope.account.root.passPhrase,to,amt,comment);
+                  
+                  
+              }else{
+                     //initiate the send call
+                      $rootScope.account.root.passphraseOK=true;   
+                      $rootScope.account.root.isEncrypted=true;
+                      $rootScope.account.walletSend(to,amt,comment);      
+                  }
+              
+                        }
+                        );
+                
+            }else{
+                // generally the case when it is called atleast once
+                $rootScope.account.walletSend(to,amt,comment);
+            }
+            
+            
+        },
+        walletSend:function(to,amt,comment){
+            
+            console.log("walletSend called");
+            rpcService.validateAddress(to).then(function(response){
+                //console.log(response);
+                if(response.data.result.isvalid && response.data.error===null){
+                    console.log("valid address");
+                    rpcService.walletPassphrase($rootScope.account.root.passPhrase,60).then(function (response){
+                        rpcService.walletSendFrom($rootScope.sendFrom_address,to,amt,6,comment,comment).then(function(response){
+                          //console.log(response);
+                         rpcService.walletLock().then(function(response){
+                             //console.log(response);
+                         });  
+                            
+                        });
+                        
+                         
+                        
+                    });
+                    
+                }else{
+                    console.log("invalid address");
+                }
+                
+            });
+            
+        },
+        passpraseWait:function(old,to,amt,comment){
+             console.log("passphrase check");
+           if(old!==$rootScope.account.root.passPhrase){
+                       $rootScope.account.walletSendinit(to,amt,comment); 
+                      
+                      }else{$timeout($rootScope.account.passpraseWait(old,to,amt,comment),1000);}
+                  
         }
       
   };
@@ -119,7 +204,7 @@ angular.module('iguanaApp.controllers').controller('indexController',
 self.updateBalanceIguana=function(){
     console.log("updatebalance iguana called");
     if(testVersionRPC.isLoggedin && testVersionRPC.rpcOK){
-               var tx=self.acc.updateBalance();
+               var tx=$rootScope.account.updateBalance();
                $timeout(self.updateBalanceIguana, testVersionRPC.settings.balanceTimer*60*1000);
        }else{
            $timeout(self.updateBalanceIguana, 1000);
@@ -207,20 +292,25 @@ self.updateBalanceIguana();
   // get btc address and generate QR code for the last btc address
   self.get_btc = function() {
     var inner = this;
-    var addr=self.acc.root.totalBalance.addresses, max=0,temp="";
+    var addr=$rootScope.account.root.totalBalance.addresses, max=0,temp="";
     console.log(addr);
     
     for(var x in addr){
-        if(max<self.acc.root.totalBalance.by_addr[addr[x]]){
+        if(max<$rootScope.account.root.totalBalance.by_addr[addr[x]]){
             temp=addr[x];
-            max=self.acc.root.totalBalance.by_addr[addr[x]];
-        }else if(max==0){
+            max=$rootScope.account.root.totalBalance.by_addr[addr[x]];
+        }else if(max===0){
             temp=addr[x];
         }
     }
            $rootScope.app_config.wallet.settings.walletId=temp;
            self.walletId=temp;
-    inner.btc_addr=temp;
+           if(self.sendFrom_address===""){
+               
+           self.sendFrom_address=temp;
+           $rootScope.sendFrom_address=temp;
+}
+           inner.btc_addr=temp;
     $("#qrcode").html("");
      $("#qrcode").qrcode({
           render: 'image',
@@ -244,13 +334,15 @@ self.updateBalanceIguana();
       }
     });*/
   };
-
+self.sendFrom_address="";
+$rootScope.sendFrom_address="";
   this.init = function() {
-    var self = this;
+    //var self = this;
 
     if ($stateParams.action == "openSendTab") {
       $log.debug('address is: ', $stateParams.address);
-      self.btc_addr = $stateParams.address;
+      self.sendFrom_address = $stateParams.address;
+      $rootScope.sendFrom_address=$stateParams.address;
       var send_tab = {
         'title': gettext('Send'),
         'icon': {false:'icon-send', true: 'icon-send-active'},
