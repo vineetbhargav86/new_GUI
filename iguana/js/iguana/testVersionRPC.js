@@ -328,6 +328,10 @@ angular.module('iguanaApp.services')
           var request='{"id":"iguana_walletSend_test", "method": "sendfrom", "params": ["'+from+'", "'+to+'", '+amt+', '+minconf+', "'+comment+'", "'+commentto+'"] }';  
           return self.callAPI(request);
         },
+        walletSendTo:function(to,amt,comment,commentto){
+          var request='{"id":"iguana_walletSend_test", "method": "sendtoaddress", "params": ["'+to+'", '+amt+', "'+comment+'", "'+commentto+'"] }';  
+          return self.callAPI(request);
+        },
         walletEncrypt:function(pass){
             var request='{"jsonrpc": "1.0", "id":"curltest",  "method": "encryptwallet", "params": ["'+pass+'"] }';  
           

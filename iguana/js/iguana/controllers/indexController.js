@@ -14,6 +14,9 @@ angular.module('iguanaApp.controllers').controller('indexController',
   self.prevState = 'walletHome';
   self.iguanaTX=[];
   self.walletId="";
+  $rootScope.sendFrom_address="";
+$rootScope.sendFrom_account="";
+
  $rootScope.account={
       root:testVersionRPC,
       
@@ -43,17 +46,30 @@ angular.module('iguanaApp.controllers').controller('indexController',
     }
         },
         calculatecalance:function(){
-            
+            self.iguanaTX=[];
             console.log("Calculating balance");
           
-          var total=0,max=0,temp,tx=[],t={},addresses=[];
-          
+          var total=0,max=0,temp,tx=[],addresses=[];
+          $rootScope.account.root.totalBalance.by_name={};
+              $rootScope.account.root.totalBalance.by_addr={};
+              $rootScope.account.root.totalBalance.by_name["nolabel"]={};
+            $rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]=0;
+                $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"]=[];
+                
           for(var x in  $rootScope.account.root.listreceived.output){
               temp= $rootScope.account.root.listreceived.output[x];
-              //console.log(temp);
+             //console.log(temp);
            $rootScope.account.root.totalBalance.by_addr[temp.address]=0;
+           
            if(temp.account!==""){
-                $rootScope.account.root.totalBalance.by_name[temp.account]=0;
+                if(typeof $rootScope.account.root.totalBalance.by_name[temp.account]==='undefined'){
+                $rootScope.account.root.totalBalance.by_name[temp.account]={};
+                $rootScope.account.root.totalBalance.by_name[temp.account]["balance"]=0;
+                $rootScope.account.root.totalBalance.by_name[temp.account]["accounts"]=[];
+                  }
+                  $rootScope.account.root.totalBalance.by_name[temp.account]["accounts"].push(temp.address);
+           }else{
+               $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"].push(temp.address);
            }
            addresses.push(temp.address);
            console.log("pushed :"+temp.address);
@@ -62,45 +78,57 @@ angular.module('iguanaApp.controllers').controller('indexController',
           //root.totalBalance.total=total;
           
           for(var x in  $rootScope.account.root.transactions.output){
+              var t={};
               temp= $rootScope.account.root.transactions.output[x];
+              console.log(temp);
               if(temp.category==="receive"){
                   t.img="img/icon2.png";
                    t.label="Received";
                   t.category="receive";
                  $rootScope.account.root.totalBalance.by_addr[temp.address]= $rootScope.account.root.totalBalance.by_addr[temp.address]+temp.amount; 
                 if(temp.account!==""){
-                $rootScope.account.root.totalBalance.by_name[temp.account]= $rootScope.account.root.totalBalance.by_name[temp.account]+temp.amount;
+                $rootScope.account.root.totalBalance.by_name[temp.account]["balance"]= $rootScope.account.root.totalBalance.by_name[temp.account]["balance"]+temp.amount;
+           //     $rootScope.account.root.totalBalance.by_name[temp.account]["accounts"].push(temp.address);
+           }else{
+               $rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]=$rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]+temp.amount;
+            // $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"].push(temp.address);
            }
            total=total+temp.amount;
               }else if(temp.category==="send"){
                   t.img="img/icon1.png";
-                  t.label="Sent to xxx";
+                  t.label="Sent";
                   t.category="send";
-                  $rootScope.account.root.totalBalance.by_addr[temp.address]= $rootScope.account.root.totalBalance.by_addr[temp.address]-temp.amount; 
+                  $rootScope.account.root.totalBalance.by_addr[temp.address]= $rootScope.account.root.totalBalance.by_addr[temp.address]+temp.amount+temp.fee; 
                 if(temp.account!==""){
-                $rootScope.account.root.totalBalance.by_name[temp.account]= $rootScope.account.root.totalBalance.by_name[temp.account]-temp.amount;
+                $rootScope.account.root.totalBalance.by_name[temp.account]["balance"]= $rootScope.account.root.totalBalance.by_name[temp.account]["balance"]+temp.amount+temp.fee;
+               // $rootScope.account.root.totalBalance.by_name[temp.account]["accounts"].push(temp.address);
+           }else{
+               $rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]=$rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]+temp.amount+temp.fee;
+              //  $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"].push(temp.address);
            }
-           total=total-temp.amount;
+           total=total+temp.amount+temp.fee;
               }
+             // console.log($rootScope.account.root.totalBalance.by_name);
               t.amt=temp.amount;
                   t.date=temp.timereceived;
               t.txid=temp.txid;
               t.block=temp.blockhash;
               t.coin= $rootScope.account.root.activeCOIN;
-            $rootScope.account.root.totalBalance.total=total;
+            
            
-           //console.log(t);
-           tx.push(t);
+           console.log(t);
+           self.iguanaTX.push(t);
            }
-          self.iguanaTX=tx;
-       console.log(tx);
+           $rootScope.account.root.totalBalance.total=total;
+          
+       console.log(self.iguanaTX);
        
      var profile=profileService.Profile;
         $rootScope.account.root.totalBalance.addresses=addresses;
        
      profile.balance=$rootScope.account.root.totalBalance;
      profile.credentials.handle= $rootScope.account.root.user;
-     console.log($rootScope.account.root.user);
+     //console.log($rootScope.account.root.user);
      profileService.fromObj(profile);
      storageService.storeProfile();
      
@@ -108,7 +136,7 @@ angular.module('iguanaApp.controllers').controller('indexController',
        self.get_btc();          
       }
 
-          return tx;
+          return self.iguanaTX;
           
           
             
@@ -165,14 +193,17 @@ angular.module('iguanaApp.controllers').controller('indexController',
         },
         walletSend:function(to,amt,comment){
             
+            if($rootScope.sendFrom_account===""){
+                $rootScope.sendFrom_account=$rootScope.account.return_account($rootScope.sendFrom_address);
+            }
             console.log("walletSend called");
             rpcService.validateAddress(to).then(function(response){
                 //console.log(response);
                 if(response.data.result.isvalid && response.data.error===null){
                     console.log("valid address");
                     rpcService.walletPassphrase($rootScope.account.root.passPhrase,60).then(function (response){
-                        rpcService.walletSendFrom($rootScope.sendFrom_address,to,amt,6,comment,comment).then(function(response){
-                          //console.log(response);
+                        rpcService.walletSendTo(to,amt,comment,comment).then(function(response){
+                          console.log(response.data);
                          rpcService.walletLock().then(function(response){
                              //console.log(response);
                          });  
@@ -197,6 +228,28 @@ angular.module('iguanaApp.controllers').controller('indexController',
                       
                       }else{$timeout($rootScope.account.passpraseWait(old,to,amt,comment),1000);}
                   
+        },
+        return_account:function(address){
+            console.log("Entered return_account");
+            for(var x in $rootScope.account.root.totalBalance.by_name){
+                
+                var temp=$rootScope.account.root.totalBalance.by_name[x];
+                console.log(temp);
+                var i=0, len=temp.accounts.length;
+    for (; i<len; i++) {
+        
+      if (temp.accounts[i] === address && x!=="nolabel") {
+          console.log("Returning account name: "+x);
+        return x;
+      }else if(temp.accounts[i] === address && x==="nolabel"){
+          console.log("Returning empty account: ");
+         return ""; 
+      }
+      i++;
+    }
+            }
+            
+            return "";  
         }
       
   };
@@ -335,7 +388,7 @@ self.updateBalanceIguana();
     });*/
   };
 self.sendFrom_address="";
-$rootScope.sendFrom_address="";
+
   this.init = function() {
     //var self = this;
 
@@ -343,6 +396,8 @@ $rootScope.sendFrom_address="";
       $log.debug('address is: ', $stateParams.address);
       self.sendFrom_address = $stateParams.address;
       $rootScope.sendFrom_address=$stateParams.address;
+      $rootScope.sendFrom_account=$rootScope.account.return_account($stateParams.address);
+      console.log($rootScope.sendFrom_account);
       var send_tab = {
         'title': gettext('Send'),
         'icon': {false:'icon-send', true: 'icon-send-active'},

@@ -130,7 +130,7 @@
                   </ul>
                 </li>
                  <li>
-                  <ul ng-repeat="tx in index.iguanaTX"class="innr-list">
+                  <ul ng-repeat="tx in index.iguanaTX  | orderBy:'-date' track by $index"class="innr-list">
                     <li>
                       <span class="icon"><img ng-src="{{tx.img}}"></span>
                     </li>
