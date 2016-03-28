@@ -85,7 +85,7 @@ angular.module('iguanaApp.controllers').controller('logInController',
       $scope.errorOn = true;    
     } else {
       naclAPI.makeRequest(nacl_request_login, function(request, response) {
-        if (response.data.result == "success") {
+        if (response.data.result === "success") {
           $scope.response = response.data;
           $log.debug("SuperNet login Response: ");
           $log.debug(response.data);
@@ -127,6 +127,31 @@ angular.module('iguanaApp.controllers').controller('logInController',
                 }
               });
               console.log(profileService.toObj());
+              var checkLoggedIN=function(){
+               
+                   var base=this;
+              if (testVersionRPC.action==="waiting") {
+                  // do not show anything
+                  $timeout(checkLoggedIN, 50);
+              }else if( testVersionRPC.action!=="waiting" && testVersionRPC.rpcOK && testVersionRPC.isLoggedin){
+              go.walletHome();                  
+              }else {
+                //$scope.response = 'Please input all required data';
+                //$scope.errorText = testVersionRPC.BTCDErrorMessage+testVersionRPC.BTCErrorMessage;;
+                if(testVersionRPC.BTCDErrorMessage==="Authorization Required"){
+                   $scope.errorText= "Wrong username and password for BitCoinDark";
+                }else if(testVersionRPC.BTCErrorMessage==="Authorization Required"){
+                   $scope.errorText= "Wrong username and password for BitCoin";
+                }else if(testVersionRPC.BTCErrorMessage==="Bitcoin wallet not active." && testVersionRPC.BTCDErrorMessage==="BitcoinDark wallet not active."){
+                  $scope.errorText="Bitcoin or BitcoinDark wallet not active please run any one client";
+                  
+                }
+                $scope.errorOn = true;     
+                  //$timeout.cancel(base);
+              }   
+              };
+              checkLoggedIN();
+               
           /*storageService.getProfile(function(err, profile) {
             if (err) {
               $log.debug('getProfile error:', err);

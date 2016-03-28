@@ -8,7 +8,7 @@ angular.module('iguanaApp.services')
           PORT:"",user:"",password:"",passPhrase:"",isCredSaved:"",
           protocol:"http",activeCOIN:"BTCD",passphraseOK:false, 
           isEncrypted:false,isLoggedin:false,
-          rpcOK:false,
+          rpcOK:false,BTCErrorMessage:"",BTCDErrorMessage:"",action:"waiting",
           listreceived:{output:{}},
           transactions:{output:{}},
           
@@ -42,6 +42,11 @@ angular.module('iguanaApp.services')
           root.passPhrase=passphrase;
           root.protocol=proto;
           root.activeCOIN="";
+          root.BTCDErrorMessage="";
+          root.action="waiting";
+          root.BTCErrorMessage="";
+          root.rpcOK=false;
+          root.isLoggedin=false,
            root.checkPORT();
           };
       
@@ -60,19 +65,21 @@ angular.module('iguanaApp.services')
 root.PORT=BTC;
 root.activeCOIN="BTC";
 root.rpcOK=true;
-go.walletHome();
 root.isLoggedin=true;
+root.action="done";
 //root.listreceivedFN();
 //root.getBalanceData();
 
 }, function errorCallback(response) {
     if(response.status === 401){
         console.log(response.statusText); 
+        root.BTCErrorMessage=response.statusText;
+        root.rpcOK="no";
      }
      //console.log(response); 
      if(response.status === -1){
-         
-    console.log('Bitcoin wallet not active.');;
+    console.log('Bitcoin wallet not active.');
+     root.BTCErrorMessage="Bitcoin wallet not active.";
      }
   });
   
@@ -87,20 +94,22 @@ root.isLoggedin=true;
 root.PORT=BTCD;
 root.activeCOIN="BTCD";
 root.rpcOK=true;
-go.walletHome();
 root.isLoggedin=true;
+root.action="done";
 //root.listreceivedFN();
 //root.getBalanceData();
           
 }, function errorCallback(response) {
-     
+     root.action="error";
     if(response.status === 401){
-        console.log(response.statusText); 
+        console.log(response.statusText);
+        root.BTCDErrorMessage=response.statusText;
      }
      
      
      if(response.status === -1){
-     console.log('Bitcoin wallet not active.');;
+     console.log('BitcoinDark wallet not active.');
+     root.BTCDErrorMessage="BitcoinDark wallet not active.";
      }
      
   });

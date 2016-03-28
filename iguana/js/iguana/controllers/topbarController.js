@@ -11,6 +11,8 @@ angular.module('iguanaApp.controllers').controller('topbarController',
       console.info("SuperNET logout Response:");
       console.info(response);
       $rootScope.activeHandle = null;
+      $rootScope.account.root.isLoggedin=false;
+      $rootScope.account.root.rpcOK=false;
       // storageService.deleteProfile(function(err) {
       //   if (err) {
       //     $log.debug('deleteProfile error: ', err);

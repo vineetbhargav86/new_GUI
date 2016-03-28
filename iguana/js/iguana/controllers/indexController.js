@@ -48,7 +48,6 @@ $rootScope.sendFrom_account="";
         calculatecalance:function(){
             self.iguanaTX=[];
             console.log("Calculating balance");
-          
           var total=0,max=0,temp,tx=[],addresses=[];
           $rootScope.account.root.totalBalance.by_name={};
               $rootScope.account.root.totalBalance.by_addr={};
@@ -256,7 +255,7 @@ $rootScope.sendFrom_account="";
   
 self.updateBalanceIguana=function(){
     console.log("updatebalance iguana called");
-    if(testVersionRPC.isLoggedin && testVersionRPC.rpcOK){
+    if($rootScope.account.root.isLoggedin && $rootScope.account.root.rpcOK){
                var tx=$rootScope.account.updateBalance();
                $timeout(self.updateBalanceIguana, testVersionRPC.settings.balanceTimer*60*1000);
        }else{
