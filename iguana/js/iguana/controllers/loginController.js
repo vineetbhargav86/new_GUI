@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iguanaApp.controllers').controller('logInController',
-  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService,testVersionRPC, profileService){
+  function($rootScope, $scope, $state, $http, $timeout, $log, naclAPI, pphgen, go, storageService,testVersionRPC,rpcService, profileService){
 
   // $scope.check_activeHandle = function() {
   //   console.info("check activeHandle...");
@@ -109,9 +109,9 @@ angular.module('iguanaApp.controllers').controller('logInController',
 
               
             if ($scope.remember) {
-              profile.credentials.username = $scope.username;
+              /*profile.credentials.username = $scope.username;
               profile.credentials.password = $scope.password;
-              profile.credentials.passphrase = $scope.passphrase;
+              profile.credentials.passphrase = $scope.passphrase;*/
               $log.debug("remember: ", $scope.remember);
             }
             
@@ -134,7 +134,39 @@ angular.module('iguanaApp.controllers').controller('logInController',
                   // do not show anything
                   $timeout(checkLoggedIN, 50);
               }else if( testVersionRPC.action!=="waiting" && testVersionRPC.rpcOK && testVersionRPC.isLoggedin){
-              go.walletHome();                  
+                  
+              rpcService.checkPassphrase($rootScope.account.root.passPhrase).then(
+                        function(response){
+                                       $rootScope.account.root.isEncrypted=true;
+                if(response.data.error && response.data.error.code === -15){
+                   $rootScope.account.root.isEncrypted=false;
+                   $scope.errorText= "Wallet is not encrypted, Encrypting wallet!! Please reload wallet client.";
+                  $scope.errorOn = true; 
+                   rpcService.walletEncrypt($rootScope.account.root.passPhrase).then(
+                        function(response){
+                            /// to be tested 
+                            //console.log(response);
+                            //$rootScope.account.walletSend(to,amt,comment);  
+                        });
+              }else if(response.data.error && response.data.error.code === -14){
+                 $rootScope.account.root.passphraseOK=false; 
+                 $scope.errorText= "Wrong Passphrase.";
+                  $scope.errorOn = true;   
+                  
+              }else if(response.data.result === null && response.data.error === null){
+                  $rootScope.account.root.passphraseOK=true;
+                  $rootScope.account.root.isEncrypted=true;
+                  if($scope.remember){
+                  $rootScope.account.root.isCredSaved=true;
+                  }else{
+                    $rootScope.account.root.isCredSaved=false;
+                    $rootScope.account.root.passPhrase="";
+                    }
+                    go.walletHome();
+              } 
+                        });
+              
+              
               }else {
                 //$scope.response = 'Please input all required data';
                 //$scope.errorText = testVersionRPC.BTCDErrorMessage+testVersionRPC.BTCErrorMessage;;

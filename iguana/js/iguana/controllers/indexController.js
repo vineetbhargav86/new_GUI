@@ -17,6 +17,7 @@ angular.module('iguanaApp.controllers').controller('indexController',
   $rootScope.sendFrom_address="";
 $rootScope.sendFrom_account="";
 
+$rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
  $rootScope.account={
       root:testVersionRPC,
       
@@ -131,7 +132,7 @@ $rootScope.sendFrom_account="";
      profileService.fromObj(profile);
      storageService.storeProfile();
      
-      if($rootScope.app_config.wallet.settings.walletId==""){
+      if($rootScope.app_config.wallet.settings.walletId===""){
        self.get_btc();          
       }
 
@@ -142,20 +143,31 @@ $rootScope.sendFrom_account="";
         },
         walletSendinit:function(to,amt,comment){
             
-            if(!$rootScope.account.root.passphraseOK){
+            if(!$rootScope.account.root.isCredSaved && $rootScope.account.root.passPhrase===""){
+              console.log("passphrase check loop");
+              $rootScope.account.root.passphraseOK=false; 
+              $rootScope.account.root.isEncrypted=false;
+              $scope.enterPassphrase();
+              $rootScope.lastSendFields.to=to;
+              $rootScope.lastSendFields.amount=amt;
+              $rootScope.lastSendFields.comment=comment;
+                
+            }
+            else if(!$rootScope.account.root.passphraseOK){
                 rpcService.checkPassphrase($rootScope.account.root.passPhrase).then(
                         function(response){
                             // checking the response
                             console.log(response);
-               /* if(response.data.error && response.data.error.code === -14){
-                 $rootScope.account.root.passphraseOK=false; 
-              }else if(response.data.error && response.data.error.code === -15){
+                            $rootScope.account.root.isEncrypted=true;
+                if(response.data.error && response.data.error.code === -15){
                    $rootScope.account.root.isEncrypted=false;
                    
+              }else if(response.data.error && response.data.error.code === -14){
+                 $rootScope.account.root.passphraseOK=false; 
               }else if(response.data.result === null && response.data.error === null){
                   $rootScope.account.root.passphraseOK=true;
                   $rootScope.account.root.isEncrypted=true;
-              }*/
+              }
               
               if(!$rootScope.account.root.isEncrypted && response.data.error && response.data.error.code === -15){
                  rpcService.walletEncrypt($rootScope.account.root.passPhrase).then(
@@ -166,12 +178,24 @@ $rootScope.sendFrom_account="";
                         });
                   
               }else  if(response.data.error && response.data.error.code === -14){
-                 $rootScope.account.root.passphraseOK=false; 
-                 $rootScope.account.root.isEncrypted=false;
-                 console.log("asking for new passphrase");
-                 $rootScope.account.root.passPhrase=$scope.enterPassphrase();
-                 //$rootScope.account.passpraseWait($rootScope.account.root.passPhrase,to,amt,comment);
+                 
+              console.log("passphrase check loop");
+              $rootScope.account.root.passphraseOK=false; 
+              $rootScope.account.root.isEncrypted=false;
+              $scope.enterPassphrase();
+                $rootScope.lastSendFields.to=to;
+                $rootScope.lastSendFields.amount=amt;
+                $rootScope.lastSendFields.comment=comment;
+                
+           /*    
+               /* var passpraseWait=function(old,to,amt,comment){
+             console.log("passphrase check");
+           if(old!==$rootScope.account.root.passPhrase){
+                       $rootScope.account.walletSendinit(to,amt,comment); 
+                      
+                      }else{$timeout(passpraseWait(old,to,amt,comment),1000);}
                   
+        };  passpraseWait(oldpass,to,amt,comment); */
                   
               }else{
                      //initiate the send call
@@ -191,9 +215,9 @@ $rootScope.sendFrom_account="";
             
         },
         walletSend:function(to,amt,comment){
-            
+            $rootScope.lastSendFields.retires=0;
             if($rootScope.sendFrom_account===""){
-                $rootScope.sendFrom_account=$rootScope.account.return_account($rootScope.sendFrom_address);
+                //$rootScope.sendFrom_account=$rootScope.account.return_account($rootScope.sendFrom_address);
             }
             console.log("walletSend called");
             rpcService.validateAddress(to).then(function(response){
@@ -205,6 +229,9 @@ $rootScope.sendFrom_account="";
                           console.log(response.data);
                          rpcService.walletLock().then(function(response){
                              //console.log(response);
+                             if(!$rootScope.account.root.isCredSaved){
+                                 $rootScope.account.root.passPhrase="";
+                             }
                          });  
                             
                         });
@@ -215,18 +242,13 @@ $rootScope.sendFrom_account="";
                     
                 }else{
                     console.log("invalid address");
+                    if(!$rootScope.account.root.isCredSaved){
+                                 $rootScope.account.root.passPhrase="";
+                             }
                 }
                 
             });
             
-        },
-        passpraseWait:function(old,to,amt,comment){
-             console.log("passphrase check");
-           if(old!==$rootScope.account.root.passPhrase){
-                       $rootScope.account.walletSendinit(to,amt,comment); 
-                      
-                      }else{$timeout($rootScope.account.passpraseWait(old,to,amt,comment),1000);}
-                  
         },
         return_account:function(address){
             console.log("Entered return_account");
@@ -252,6 +274,22 @@ $rootScope.sendFrom_account="";
         }
       
   };
+   var unbind = $rootScope.$on('PassPhraseEntered',function(event, data) { 
+  
+  if($rootScope.lastSendFields.amount!==0 && $rootScope.lastSendFields.retires<3 ){
+      $rootScope.lastSendFields.retires=$rootScope.lastSendFields.retires+1;
+      console.log("called PassPhraseEntered");
+      $rootScope.account.walletSendinit($rootScope.lastSendFields.to ,$rootScope.lastSendFields.amount ,$rootScope.lastSendFields.comment);
+  $rootScope.lastSendFields.to="";
+  $rootScope.lastSendFields.amount=0;
+  $rootScope.lastSendFields.comment="";
+      }else if ($rootScope.lastSendFields.amount!==0 && ! $rootScope.lastSendFields.retires<3){
+          console.log("Max number of attempts. You can not continue!! ");
+          $rootScope.lastSendFields.retires=0;
+      }
+  
+  }); 
+  $scope.$on('$destroy', unbind);
   
 self.updateBalanceIguana=function(){
     console.log("updatebalance iguana called");
