@@ -22,17 +22,9 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
       root:testVersionRPC,
       
         updateBalance:function(){
-            
-            if( $rootScope.account.root.listreceived.output.length>0){
-      rpcService.getBalance().then(
-               function(response){
-                    $rootScope.account.root.transactions.output=response.data.result;
-               return  $rootScope.account.calculatecalance();    
-              }
-               );  
-        
-    }else{
-        
+            console.log( $rootScope.account.root.listreceived.output.length);
+            if(self.recent_address_creation || !$rootScope.account.root.listreceived.output.length){
+        if(self.recent_address_creation){self.recent_address_creation=false;}
         rpcService.getListAccounts().then(function(data){
             $rootScope.account.root.listreceived.output=data.data.result;
             
@@ -43,6 +35,14 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
               }
                );   
         });
+        
+    }else{
+      rpcService.getBalance().then(
+               function(response){
+                    $rootScope.account.root.transactions.output=response.data.result;
+               return  $rootScope.account.calculatecalance();    
+              }
+               );  
         
     }
         },
@@ -94,6 +94,7 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
             // $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"].push(temp.address);
            }
            total=total+temp.amount;
+           t.amt=temp.amount;
               }else if(temp.category==="send"){
                   t.img="img/icon1.png";
                   t.label="Sent";
@@ -107,9 +108,10 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
               //  $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"].push(temp.address);
            }
            total=total+temp.amount+temp.fee;
+           t.amt=temp.amount+temp.fee;
               }
              // console.log($rootScope.account.root.totalBalance.by_name);
-              t.amt=temp.amount;
+              
                   t.date=temp.timereceived;
               t.txid=temp.txid;
               t.block=temp.blockhash;
@@ -271,8 +273,36 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
             }
             
             return "";  
-        }
-      
+        },
+        generateNEWaddress:function(){
+            
+            rpcService.getnewaddress().then(
+               function(response){
+                //console.log(response);
+                if(response.data.error===null){
+                var addr=response.data.result;
+                self.walletId=addr;
+                self.recent_address_creation=true;
+                $("#qrcode").html("");
+     $("#qrcode").qrcode({
+          render: 'image',
+          size: 201,
+          text: addr
+        });
+        $log.debug("qrcode init: ", addr);
+                }
+
+              /* $("#qrcode").html("");
+     $("#qrcode").qrcode({
+          render: 'image',
+          size: 201,
+          text: inner.btc_addr
+        });
+        $log.debug("qrcode init: ", inner.btc_addr);*/
+               //return  $rootScope.account.calculatecalance();    
+              }
+               );  
+      }
   };
    var unbind = $rootScope.$on('PassPhraseEntered',function(event, data) { 
   
@@ -290,18 +320,17 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
   
   }); 
   $scope.$on('$destroy', unbind);
-  
+  self.timer="";
+  self.recent_address_creation=false;
 self.updateBalanceIguana=function(){
+   // $timeout.cancel(self.timer);
     console.log("updatebalance iguana called");
     if($rootScope.account.root.isLoggedin && $rootScope.account.root.rpcOK){
                var tx=$rootScope.account.updateBalance();
-               $timeout(self.updateBalanceIguana, testVersionRPC.settings.balanceTimer*60*1000);
+               self.timer=$timeout(self.updateBalanceIguana, testVersionRPC.settings.balanceTimer*60*1000);
        }else{
-           $timeout(self.updateBalanceIguana, 1000);
+           self.timer=$timeout(self.updateBalanceIguana, 1000);
        }
-    
-
-    
 };
 
 self.updateBalanceIguana();

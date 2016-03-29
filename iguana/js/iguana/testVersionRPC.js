@@ -342,7 +342,12 @@ angular.module('iguanaApp.services')
           return self.callAPI(request);
         },
         walletEncrypt:function(pass){
-            var request='{"jsonrpc": "1.0", "id":"curltest",  "method": "encryptwallet", "params": ["'+pass+'"] }';  
+            var request='{"jsonrpc": "1.0", "id":"iguana_encrypt_test",  "method": "encryptwallet", "params": ["'+pass+'"] }';  
+          
+            return self.callAPI(request);
+        },
+         getnewaddress:function(){
+            var request='{"jsonrpc": "1.0", "id":"iguana_address_test",  "method": "getnewaddress", "params": [] }';  
           
             return self.callAPI(request);
         }

@@ -23,34 +23,7 @@ angular.module('iguanaApp.controllers').controller('walletHomeController',
   // }
 
   this.gen_btc_addr = function() {
-    // var keyPair = bitcoin.ECPair.makeRandom();
-    // var address = keyPair.getAddress();
-    // this.btc_addr = address;
-    // var self = this;
-    // storageService.getProfile(function(err, profile) {
-    //   if (err) {
-    //     $log.debug('getProfile error:', err);
-    //     return;
-    //   } else if (profile) {
-    //     profile.credentials.btc_addr.push(address);
-    //     storageService.storeProfile(profile, function(err) {
-    //       if (err) {
-    //         $log.debug('storeProfile error: ', err);
-    //         return;
-    //       } else {
-    //         $log.debug('profile updated: ', profile);
-    //         $("#qrcode").empty();
-    //         $("#qrcode").qrcode({
-    //           render: 'image',
-    //           size: 201,
-    //           text: address
-    //         });
-    //         $log.debug("qrcode generated: ", address);
-    //         $log.debug("address: ", self.btc_addr);
-    //       }
-    //     });
-    //   }
-    // });
+    $rootScope.account.generateNEWaddress();
 
     return false;
   };
