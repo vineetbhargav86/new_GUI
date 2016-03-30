@@ -7,7 +7,7 @@ mkdir -p pnacl_${BUILD_NUMBER}/pnacl/Release/
 
 #copying required folders
 cp -rf iguana/css pnacl_${BUILD_NUMBER}/
-cp -rf iguana/js/iguana pnacl_${BUILD_NUMBER}/js/iguana
+cp -rf iguana/js pnacl_${BUILD_NUMBER}/
 cp -rf iguana/confs pnacl_${BUILD_NUMBER}/
 cp -rf iguana/fonts pnacl_${BUILD_NUMBER}/
 cp -rf iguana/font pnacl_${BUILD_NUMBER}/
@@ -16,10 +16,7 @@ cp -rf iguana/img pnacl_${BUILD_NUMBER}/
 cp -rf iguana/help pnacl_${BUILD_NUMBER}/
 cp -rf iguana/views pnacl_${BUILD_NUMBER}/
 cp -rf iguana/lib pnacl_${BUILD_NUMBER}/
-cp -rf iguana/initial.js pnacl_${BUILD_NUMBER}/
-
-cp -rf iguana/index.html pnacl_${BUILD_NUMBER}/
-cp -rf iguana/manifest.json pnacl_${BUILD_NUMBER}/
+cp -rf iguana/icons1 pnacl_${BUILD_NUMBER}/
 
 cp -rf iguana/pnacl/Release/{iguana.nmf,iguana.pexe} pnacl_${BUILD_NUMBER}/pnacl/Release/
 

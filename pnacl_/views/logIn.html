@@ -1,0 +1,63 @@
+<div class="splash extra-padding-bottom p20t content text-center"
+  ng-controller="logInController as logIn" ng-init="">
+<div id="pass">
+  <div class="pass-banner"></div>
+  <div class="pass-bottom">
+    <div class="pass-window">
+    <div class="pass-window-head">
+      <div class="medium-centered small-centered large-centered columns size-16">
+      <span class="text-bold text-white" translate>WELCOME TO IGUANA</span>
+      <p class="text-gray m0 text-light" translate>Please Login Here</p>
+    </div>
+    </div>  
+    <div class="pass-window-body">
+  <div class="row">
+      <div class="small-10 small-offset-1 large-10 large-offset-1 columns">
+      <form name="loginForm" ng-submit="" role="form">
+          <div class="form-group">
+              
+              <input type="text" name="username" id="username" class="form-control login-form-input" ng-model="username" required />
+              <label for="username" class="login-form-label">Username</label>
+          </div>
+          <div class="form-group">
+              
+              <input type="password" name="password" id="password" class="form-control login-form-input" ng-model="password" required />
+              <label for="password" class="login-form-label">Password</label>
+          </div>
+          <div class="form-group">
+              
+              <input type="password" name="passphrase" id="passphrase" class="form-control login-form-input" ng-model="passphrase" required />
+              <label for="passphrase" class="login-form-label">Passphrase</label>
+          </div>
+          <div class="form-group remember-group">
+            <label for="remember" class="login-form-label remember-label">Remember me</label>
+              <input type="checkbox" name="remember" id="remember" class="form-control remember-input" ng-model="remember" ng-click="show()" />
+          </div>
+          <div class="alert-box info" ng-show="errorOn">
+              {{errorText}}
+              <a href="#" ng-click="errorOn=false;" class="close">&times;</a>
+          </div>   
+          <div class="form-actions" style="margin-left:35px;">
+                <button type="button" class="btn btn-white" ng-click="logIn.signup()">New account</button>
+          </div>
+          <div class="form-actions" style="float:right;">
+                <button type="submit" class="btn btn-primary" ng-click="login()">Login</button>
+          </div>
+      </form>
+  </div>  
+  </div>
+  </div>
+<!--   <div class="row">
+    <p >
+      <h3 style="color:#8597A7">Login Request</h3>
+      <span style="color:#e1edf7">Request: {{request}}</span>
+      <h3 style="color:#8597A7">Login Response</h3>
+      <span style="color:#e1edf7">{{response | json}}</span>
+      
+    </p> 
+    
+  </div> -->
+  </div>
+</div>
+<div class="valign-wrapper" ng-controller="signupController as signup"></div>
+</div>

@@ -1,0 +1,93 @@
+<div class="splash extra-padding-bottom p20t content text-center"
+  ng-controller="signupController as signup" ng-init="firstStep=true;">
+<div id="pass">
+  <div class="pass-banner"></div>
+  <div class="pass-bottom">
+    <div class="pass-window signup-window">
+  <div class="pass-window-head">
+    <div class="medium-centered small-centered large-centered columns size-16">
+      <span class="text-bold text-white" translate>WELCOME TO IGUANA</span>
+      <p class="text-gray m0 text-light" translate>Please SignUp Here</p>
+    </div>
+  </div>
+  <div class="pass-window-body">
+  <div class="row">
+      <div class="small-12 large-12">
+      <form name="signupForm" ng-submit="" role="form">
+          <div class="form-group small-10 small-offset-1 large-10 large-offset-1">
+              <input type="text" name="username" id="username" class="form-control login-form-input" ng-model="username" required />
+              <label class="login-form-label" for="username" >Username</label>
+          </div>
+          <div class="form-group small-10 small-offset-1 large-10 large-offset-1">
+              <input  type="password" name="password" id="password" class="form-control login-form-input" ng-model="password" required />
+              <label class="login-form-label" for="password" >Password</label>
+          </div>
+          <div class="signup-passphrase" ng-show="firstStep">
+            <div class="signup-passphrase-header clearfix">
+                <div>
+                  <h2>Step 1/2 - Generate a Passphrase</h2>
+                </div>
+                <div>You can find your passphrase below</div>
+            </div>
+            <div class="signup-passphrase-body clearfix">
+                <div class="left-margin-40 right-margin-40">
+                    <div class="input-field passphraseGeneration">
+                        <textarea id="newPassphrase" class="materialize-textarea ng-valid ng-dirty" ng-model="passphrase" ng-trim="false" style="height: 14.2px;" required></textarea>
+                        <label class="signup-passphrase-label" for="newPassphrase">Passphrase</label>
+                    </div>
+                <span class="pull-right generate no-select" ng-click="generatePassword()"><span>Generate New</span></span>
+                </div>
+            </div>
+            <div class="signup-passphrase-body bordered">
+                <span class="send-info-text">Make sure that you keep the passphrase safe. You will be asked to re-type it for confirmation.</span>
+            </div>
+            <div class="form-actions" style="float:left;margin-left:40px;">
+                  <button type="button" class="btn btn-white" ng-click="backToLogin()">Login</button>
+            </div>
+            <div class="form-actions" style="float:right;margin-right:40px;">
+                  <button type="button" class="btn btn-darkgreen" ng-click="firstStep=false;">Next step</button>
+            </div>
+            <div class="form-actions" style="float:right;margin-right:12px;">
+                  <button type="button" class="btn btn-primary" ng-click="savePass()">Save passphrase</button>
+            </div>
+          </div>
+          <div class="signup-passphrase" ng-show="!firstStep">
+            <div class="signup-passphrase-header clearfix">
+                <div>
+                  <h2>Step 2/2 - Confirm the Passphrase</h2>
+                </div>
+                <div>Please re-enter your passphrase below</div>
+            </div>
+            <div class="signup-passphrase-body clearfix" style="margin-bottom:35px;">
+                <div class="left-margin-40 right-margin-40">
+                    <div class="input-field passphraseGeneration">
+                        <textarea id="newPassphrase" class="materialize-textarea ng-valid ng-dirty" ng-model="passphraseConfirm" ng-trim="false" style="height: 14.2px;" required></textarea>
+                        <label class="signup-passphrase-label" for="newPassphrase">Passphrase</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions" style="float:left;margin-left:40px;">
+                  <button type="button" class="btn btn-white" ng-click="firstStep=true;">Go back</button>
+            </div>
+            <div class="form-actions" style="float:right;margin-right:40px;">
+                  <button type="submit" class="btn btn-darkgreen" ng-click="signup()">Get started</button>
+            </div>
+          </div>
+      </form>
+      </div>
+  </div>
+  </div>
+<!--   <div class="row">
+    <p >
+      <h3 style="color:#8597A7">Login Request</h3>
+      <span style="color:#e1edf7">Request: {{request}}</span>
+      <h3 style="color:#8597A7">Login Response</h3>
+      <span style="color:#e1edf7">{{response | json}}</span>
+      
+    </p> 
+    
+  </div> -->
+  </div>
+  </div>
+</div>
+</div>

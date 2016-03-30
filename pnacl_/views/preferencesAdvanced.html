@@ -1,0 +1,46 @@
+<div 
+  class="topbar-container" 
+  ng-include="'views/includes/topbar.html'"
+  ng-init="titleSection='Advanced'; goBackToState = 'preferences';index.showPeerFavorites=false;">
+</div>
+<!-- 30 jan 2016 -->
+<div class="content preferences advanced" ng-controller="preferencesAdvancedController as preferences">
+
+  <h4></h4>
+  
+  <ul class="no-bullet m0">
+
+    <li  ng-click="$root.go('information')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>  
+      <div translate>Wallet Information</div>
+    </li>
+
+    <li ng-click="$root.go('paperWallet')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>  
+      <div translate>Sweep paper wallet</div>
+    </li>
+ 
+    <li  ng-click="$root.go('export')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>  
+      <div translate>Export Wallet</div>
+    </li>
+
+     <li ng-click="$root.go('preferencesHistory')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>
+      <div translate>Transaction History</div>
+    </li>
+
+    <!--<li ng-click="$root.go('delete')">-->
+    <!--  <i class="icon-arrow-right3 size-24 right text-gray"></i>-->
+    <!--  <div translate>Delete Wallet</div>-->
+    <!--</li>-->
+    <li ng-click="$root.go('preferencesPeerMngmt')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>
+      <div translate>Peer Management</div>
+    </li>
+
+  </ul>
+
+</div>
+<div class="extra-margin-bottom"></div>
+
