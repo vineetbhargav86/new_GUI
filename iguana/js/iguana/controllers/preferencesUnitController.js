@@ -44,10 +44,10 @@ angular.module('iguanaApp.controllers').controller('preferencesUnitController',
       }
     ];
 
-    this.unitName = $rootScope.app_config.wallet.settings.unitName;
+    this.unitName = $rootScope.account.root.activeCOIN;
 
     this.save = function(newUnit) {
-      storageService.getProfile(function(err, profile) {
+      /*storageService.getProfile(function(err, profile) {
         if (err) {
           $log.debug('get profile error: ', err);
           return;
@@ -85,30 +85,48 @@ angular.module('iguanaApp.controllers').controller('preferencesUnitController',
             }
           });
         }
-      });
+      });*/
       
-      $rootScope.app_config.wallet.settings.unitName = newUnit.shortName; 
+      $log.debug('app_config: ', newUnit.shortName);
+      
+      
+/*    $rootScope.app_config.wallet.settings.unitName = newUnit.shortName; 
       $rootScope.app_config.wallet.settings.unitToSatoshi = newUnit.value;
       $rootScope.app_config.wallet.settings.unitDecimals = newUnit.decimals;
       $rootScope.app_config.wallet.settings.unitCode = newUnit.code;
-
+*/
       this.unitName = newUnit.shortName;
-
-      $log.debug('app_config: ', $rootScope.app_config);
-
-      storageService.storeConfig($rootScope.app_config, function(err) {
+if($rootScope.account.root.activeCOIN!==newUnit.shortName){
+    console.log("different from previous");
+     $rootScope.activeHandle = null;
+      $rootScope.account.root.isLoggedin=false;
+      $rootScope.account.root.rpcOK=false;
+      // storageService.deleteProfile(function(err) {
+      //   if (err) {
+      //     $log.debug('deleteProfile error: ', err);
+      //     return;
+      //   }
+      // });
+      
+      $timeout(function() {
+        go.logInPage();
+      }, 50);
+}else{
+   go.preferences();
+$timeout(function() {
+          $scope.$apply();
+        }, 100); 
+}
+        
+      /*storageService.storeConfig($rootScope.app_config, function(err) {
         if (err) {
           $log.debug('storeConfig Unit error: ', err);
           return;
         }
         
-        $log.debug('UnitUpdated');
         
-        go.preferences();
         
-        $timeout(function() {
-          $scope.$apply();
-        }, 100);
-      });
+        
+      });*/
     };
   });

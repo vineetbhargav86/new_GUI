@@ -141,7 +141,7 @@
                     <li>{{tx.date * 1000| date:"MM/dd/yyyy 'at' h:mma"}}</li>
                     <li>
                       <span class="new-btn">
-                        <a href="#">BlockExplorer</a>
+                          <a ng-click="index.showTXDetails(tx.txid)">BlockExplorer</a>
                       </span>
                     </li>
                   </ul>

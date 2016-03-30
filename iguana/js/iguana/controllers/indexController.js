@@ -16,7 +16,7 @@ angular.module('iguanaApp.controllers').controller('indexController',
   self.walletId="";
   $rootScope.sendFrom_address="";
 $rootScope.sendFrom_account="";
-
+$rootScope.TXdetails={};
 $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
  $rootScope.account={
       root:testVersionRPC,
@@ -302,8 +302,34 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
                //return  $rootScope.account.calculatecalance();    
               }
                );  
+      },
+      getTransaction:function(txid){
+          rpcService.gettransactionDetails(txid).then(function(response){
+              $rootScope.TXdetails=response.data.result;
+              
+              $modal.open({
+      templateUrl: 'views/modals/iguana-tx-details.html',
+      windowClass: animationService.modalAnimated.slideUp,
+      controller: 'iguanaTX',
+      resolve: {
+        passphrase: function(){
+            return self.passphrase;
+        }
+      }    
+    });
+          });
+          
+          
       }
   };
+  
+  
+  self.showTXDetails=function(txid){
+      $rootScope.TXdetails={};
+      $rootScope.account.getTransaction(txid);
+      
+  };
+  
    var unbind = $rootScope.$on('PassPhraseEntered',function(event, data) { 
   
   if($rootScope.lastSendFields.amount!==0 && $rootScope.lastSendFields.retires<3 ){
