@@ -3,6 +3,8 @@
 angular.module('iguanaApp.controllers').controller('preferencesInformationController',
   function($rootScope, $scope, $state, $log, $timeout, isMobile, gettextCatalog, lodash, storageService, go) {
     var base = 'xpub';
+  
+    this.addressNames = {};
 
     this.init = function() {
 

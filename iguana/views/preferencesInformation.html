@@ -120,9 +120,13 @@
         <!--The addresses on this list were not verified locally at this time.-->
         <ul class="no-bullet m0">
         <li class="oh ng-scope" ng-repeat="a in addrs">
-          <div class="small-8 columns enable_text_select text-black ellipsis ng-binding">
+          <div class="small-4 columns enable_text_select text-black ellipsis ng-binding" style="padding:0;">
             {{a}}<br/>
             <span class="text-gray text-right" style="float:right;">0 BTC</span>
+          </div>
+          <div class="info-address-name small-3">
+           <input type="text" name="address_name" class="enable_text_select info-address-name-input" required>
+            <label for="address_name" class="info-address-name-label">Add Address Name</label>
           </div>
           <div class="text-gray size-12 right enable_text_select">
             <span class="new-btn">

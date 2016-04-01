@@ -2755,7 +2755,7 @@ touch-action: manipulation; /* IE11+ */
 
 
 .transaction-box { float: left; width: 100%;}
-.transaction-box ul.transaction-list{ float:left; width:100%; margin: 50px 0 0; list-style:none; border:1px solid #333; min-height:250px;}
+.transaction-box ul.transaction-list{ float:left; width:100%; margin: 50px 0 0; list-style:none; border:1px solid #333; min-height:250px;height: 0px;overflow-y: scroll;}
 .transaction-box ul.transaction-list > li{ float:left; width:100%; border-bottom:1px solid #333;}
 .transaction-box ul.transaction-list > li + li{ background:#EBEBEB;}
 .transaction-box ul.transaction-list > li + li + li{ margin-top:5px; border-top:1px solid #333;}
@@ -3433,4 +3433,40 @@ label.signup-passphrase-label {
     top: -8px;
     right: 8px;
     font-size: 2rem;
+}
+
+.info-address-name{
+    position: absolute;
+    margin-left: 38%;
+}
+
+.info-address-name input{
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding-bottom: 20px;
+      z-index: 1000;
+    position: absolute;
+}
+
+.info-address-name-label{
+    position: absolute;
+    color: #B7C2CD;
+    top: 0.18rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: text;
+  opacity: 1;
+  -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    -o-transition: all .3s ease-out;
+    -ms-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+
+.info-address-name-input:focus + .info-address-name-label{
+  opacity: 0;
+}
+
+.info-address-name-input:valid + .info-address-name-label{
+  opacity: 0;
 }
