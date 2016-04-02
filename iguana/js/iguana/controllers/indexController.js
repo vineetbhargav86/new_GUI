@@ -14,7 +14,18 @@ angular.module('iguanaApp.controllers').controller('indexController',
   self.prevState = 'walletHome';
   self.iguanaTX=[];
   self.walletId="";
-  $rootScope.sendFrom_address="";
+  self.updateError=false;
+  self.walletScanStatus="";
+  self.totalBalanceAlternative=false;
+  self.totalBalanceStr="";
+  self.pendingAmount=false;
+  self.pendingAmountStr="";
+  self.anyOnGoingProcess=false;
+  self.onGoingProcessName="";
+  self.walletSendError="";
+  
+      
+      $rootScope.sendFrom_address="";
 $rootScope.sendFrom_account="";
 $rootScope.TXdetails={};
 $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
@@ -22,6 +33,8 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
       root:testVersionRPC,
       
         updateBalance:function(){
+            self.anyOnGoingProcess=true;
+  self.onGoingProcessName="updatingBalance";
             console.log( $rootScope.account.root.listreceived.output.length);
             if(self.recent_address_creation || !$rootScope.account.root.listreceived.output.length){
         if(self.recent_address_creation){self.recent_address_creation=false;}
@@ -49,7 +62,7 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
         calculatecalance:function(){
             self.iguanaTX=[];
             console.log("Calculating balance");
-          var total=0,max=0,temp,tx=[],addresses=[];
+          var total=0,max=0,temp,tx=[],addresses=[],pending=0;
           $rootScope.account.root.totalBalance.by_name={};
               $rootScope.account.root.totalBalance.by_addr={};
               $rootScope.account.root.totalBalance.by_name["nolabel"]={};
@@ -93,8 +106,15 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
                $rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]=$rootScope.account.root.totalBalance.by_name["nolabel"]["balance"]+temp.amount;
             // $rootScope.account.root.totalBalance.by_name["nolabel"]["accounts"].push(temp.address);
            }
-           total=total+temp.amount;
+           
            t.amt=temp.amount;
+           if(temp.confirmations<10){
+                self.pendingAmount=true;
+                pending=pending+temp.amount;
+           }else{
+              total=total+temp.amount; 
+           }
+           
               }else if(temp.category==="send"){
                   t.img="img/icon1.png";
                   t.label="Sent";
@@ -122,7 +142,7 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
            self.iguanaTX.push(t);
            }
            $rootScope.account.root.totalBalance.total=total;
-          
+           $rootScope.account.root.totalBalance.totalPending=pending;
        console.log(self.iguanaTX);
        
      var profile=profileService.Profile;
@@ -138,12 +158,23 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
        self.get_btc();          
       }
 
+ self.updateError=false;
+  self.walletScanStatus="";
+  self.totalBalanceAlternative=false;
+  self.totalBalanceStr=total+" "+$rootScope.account.root.activeCOIN;
+            if(self.pendingAmount){
+                self.pendingAmountStr=pending+" "+$rootScope.account.root.activeCOIN;
+                }
+  self.anyOnGoingProcess=false;
+  self.onGoingProcessName="";
           return self.iguanaTX;
-          
+         
           
             
         },
         walletSendinit:function(to,amt,comment){
+            self.anyOnGoingProcess=true;
+  self.onGoingProcessName="sendingFunds";
             
             if(!$rootScope.account.root.isCredSaved && $rootScope.account.root.passPhrase===""){
               console.log("passphrase check loop");
@@ -221,6 +252,17 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
             if($rootScope.sendFrom_account===""){
                 //$rootScope.sendFrom_account=$rootScope.account.return_account($rootScope.sendFrom_address);
             }
+           //  $rootScope.account.root.totalBalance.total=total;
+           //$rootScope.account.root.totalBalance.totalPending=pending;
+            if($rootScope.account.root.totalBalance.total<amt)
+            {
+                self.anyOnGoingProcess=false;
+                             self.onGoingProcessName="";
+                             self.walletSendStatus = 'error';
+                             self.walletSendError="Amount entered is greater than balance";
+            }else
+            {
+              
             console.log("walletSend called");
             rpcService.validateAddress(to).then(function(response){
                 //console.log(response);
@@ -234,6 +276,8 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
                              if(!$rootScope.account.root.isCredSaved){
                                  $rootScope.account.root.passPhrase="";
                              }
+                             self.anyOnGoingProcess=false;
+                             self.onGoingProcessName="";
                          });  
                             
                         });
@@ -247,9 +291,14 @@ $rootScope.lastSendFields={from:"",to:"",amount:0,comment:"",retires:0};
                     if(!$rootScope.account.root.isCredSaved){
                                  $rootScope.account.root.passPhrase="";
                              }
+                             self.anyOnGoingProcess=false;
+                             self.onGoingProcessName="";
+                             self.walletSendStatus = 'error';
+                             self.walletSendError="Invalid "+$rootScope.account.root.activeCOIN+" address";
                 }
                 
-            });
+            });  
+            }
             
         },
         return_account:function(address){

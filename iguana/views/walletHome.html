@@ -47,6 +47,7 @@
       <span translate ng-show="index.onGoingProcessName == 'scanning'">Scanning Wallet funds...</span>
       <span translate ng-show="index.onGoingProcessName == 'recreating'">Recreating Wallet...</span>
       <span translate ng-show="index.onGoingProcessName == 'generatingCSV'">Generating .csv file...</span>
+      <span translate ng-show="index.onGoingProcessName == 'sendingFunds'">Sending...</span>
     </div>
   </div>
 
@@ -62,7 +63,15 @@
       {{home.onGoingProcess}}...
     </div>
   </div>
-
+    
+    
+    <div class="onGoingProcess" ng-show="index.walletSendStatus == 'error'"  ng-click="index.walletSendStatus ='';index.walletSendError='';">
+    <div class="onGoingProcess-content" ng-style="{'background-color':app_config.colorFor}">
+      {{index.walletSendError}}
+      <br><span translate>Tap to close</span>
+    </div>
+  </div>
+    
   <div class="oh" ng-show="!index.noFocusedWallet">
 
     <!--
@@ -89,8 +98,8 @@
               <span translate>Scan status finished with error</span>
               <br><span translate>Tap to retry</span>
             </div>
-
-            <div  ng-show="!index.updateError && index.walletScanStatus != 'error'">
+              
+              <div  ng-show="!index.updateError && index.walletScanStatus != 'error'">
               <strong class="size-36">{{index.totalBalanceStr}}</strong>
               <div class="size-14"
                 ng-if="index.totalBalanceAlternative">
