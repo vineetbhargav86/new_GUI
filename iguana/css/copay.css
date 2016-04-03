@@ -3436,8 +3436,8 @@ label.signup-passphrase-label {
 }
 
 .info-address-name{
-    position: absolute;
-    margin-left: 38%;
+    float: right;
+  margin-top: -20px;
 }
 
 .info-address-name input{
@@ -3446,10 +3446,10 @@ label.signup-passphrase-label {
     padding-bottom: 20px;
       z-index: 1000;
     position: absolute;
+  width: inherit;
 }
 
 .info-address-name-label{
-    position: absolute;
     color: #B7C2CD;
     top: 0.18rem;
     font-size: 0.7rem;
