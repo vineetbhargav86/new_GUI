@@ -109,8 +109,20 @@
           <div class="enable_text_select ellipsis">
             {{a.address}} 
           </div>
-          <div class="text-gray size-12 right enable_text_select">
+          <!--<div class="text-gray size-12 right enable_text_select">
             {{a.path}} &middot;  {{a.createdOn *1000  | amDateFormat:'MMMM Do YYYY, h:mm a' }}
+          </div>-->
+          <div ng-if="!a.editing" ng-click="a.editing=true;" class="info-address-name small-3">
+        <label for="address_name" class="info-address-name-label">{{a.name}}</label>
+        </div>
+          <div ng-if="a.editing"  class="info-address-name small-3">
+        <input id="{{a.address}}_name" type="text" name="address_name" class="enable_text_select info-address-name-input" value="{{a.name}}" required>
+             <label for="address_name" class="info-address-name-label">{{a.name}}</label>
+        </div>
+          <div class="text-gray size-12 right enable_text_select">
+            <span class="new-btn">
+                <a ng-click="info.onAccnameClick(a.address);">Save address name</a>
+            </span>
           </div>
         </li>
       </ul>

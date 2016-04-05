@@ -19,10 +19,10 @@ angular.module('iguanaApp.controllers').controller('preferencesInformationContro
           $scope.walletName = profile.credentials.handle;
           $scope.walletId=$rootScope.app_config.wallet.settings.walletId;
           //$scope.addrs=profile.balance.by_addr;
-           $scope.coin=$rootScope.app_config.wallet.settings.unitCode;
+           $scope.coin=$rootScope.account.root.activeCOIN;
            var add=[];
            for(var x in profile.balance.by_addr){
-               var pair={address:x,balance:profile.balance.by_addr[x]};
+               var pair={address:x,balance:profile.balance.by_addr[x],name:"namegoeshere",editing:false};
                add.push(pair);
            }
            $scope.addrs=add;
@@ -65,6 +65,22 @@ angular.module('iguanaApp.controllers').controller('preferencesInformationContro
           });
         }
       });*/
+    };
+    
+    this.onAccnameClick=function(addr){
+        var newname=$('#'+addr+'_name').val();
+        console.log("onAccnameClick called for addr"+addr+" value entered is"+ newname);
+        for(var add in $scope.addrs){
+            console.log(add);
+            if($scope.addrs[add]["editing"] && addr===$scope.addrs[add]["address"]){
+             $scope.addrs[add]["editing"]=false;
+             $scope.addrs[add]["name"]=newname;
+             $rootScope;
+             return;
+            }
+            
+        }
+        
     };
 
     this.send = function(addr) {

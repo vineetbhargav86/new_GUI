@@ -355,6 +355,12 @@ angular.module('iguanaApp.services')
              var request='{"jsonrpc": "1.0", "id":"iguana_TX_test",  "method": "gettransaction", "params": ["'+tid+'"] }';  
           
             return self.callAPI(request);
+        },
+        setAccountName:function(name,address){
+            
+             var request='{"jsonrpc": "1.0", "id":"iguana_TX_test",  "method": "gettransaction", "params": ["'+tid+'"] }';  
+          
+            return self.callAPI(request);
         }
         
 
